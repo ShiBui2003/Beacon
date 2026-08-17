@@ -125,12 +125,18 @@ ALTER TABLE public.departments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.workflow_states ENABLE ROW LEVEL SECURITY;
 
 -- Basic RLS policies
+-- (DROP IF EXISTS first: 0008_add_missing_columns.sql already created a
+-- policy with the identical name "Departments are viewable by everyone" on
+-- this same table when migrations are applied in filename order.)
+DROP POLICY IF EXISTS "Departments are viewable by everyone" ON public.departments;
 CREATE POLICY "Departments are viewable by everyone" ON public.departments
     FOR SELECT USING (true);
 
+DROP POLICY IF EXISTS "Workflow states are viewable by everyone" ON public.workflow_states;
 CREATE POLICY "Workflow states are viewable by everyone" ON public.workflow_states
     FOR SELECT USING (true);
 
+DROP POLICY IF EXISTS "Authenticated users can insert workflow states" ON public.workflow_states;
 CREATE POLICY "Authenticated users can insert workflow states" ON public.workflow_states
     FOR INSERT WITH CHECK (auth.uid() IS NOT NULL);
 

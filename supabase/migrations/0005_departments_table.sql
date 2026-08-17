@@ -73,16 +73,23 @@ ALTER TABLE departments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE category_department_mapping ENABLE ROW LEVEL SECURITY;
 
 -- Allow all authenticated users to read departments
+-- (DROP IF EXISTS first: a sibling same-numbered migration,
+-- 0005_departments_simple.sql, may have already created a policy with this
+-- exact name on this same table when migrations are applied in filename order.)
+DROP POLICY IF EXISTS "Allow authenticated users to read departments" ON departments;
 CREATE POLICY "Allow authenticated users to read departments" ON departments
   FOR SELECT TO authenticated USING (true);
 
 -- Allow all authenticated users to read category mappings
+DROP POLICY IF EXISTS "Allow authenticated users to read category mappings" ON category_department_mapping;
 CREATE POLICY "Allow authenticated users to read category mappings" ON category_department_mapping
   FOR SELECT TO authenticated USING (true);
 
 -- Only allow admins to modify departments (you may need to adjust this based on your admin role system)
+DROP POLICY IF EXISTS "Allow admins to modify departments" ON departments;
 CREATE POLICY "Allow admins to modify departments" ON departments
   FOR ALL TO authenticated USING (true); -- Adjust this based on your admin role system
 
+DROP POLICY IF EXISTS "Allow admins to modify category mappings" ON category_department_mapping;
 CREATE POLICY "Allow admins to modify category mappings" ON category_department_mapping
   FOR ALL TO authenticated USING (true); -- Adjust this based on your admin role system

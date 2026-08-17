@@ -533,7 +533,7 @@ CREATE POLICY "System can insert admin notifications" ON public.admin_notificati
 -- Issue votes - users can vote
 DROP POLICY IF EXISTS "Users can vote on issues" ON public.issue_votes;
 CREATE POLICY "Users can vote on issues" ON public.issue_votes
-    FOR INSERT USING (auth.uid() = user_id);
+    FOR INSERT WITH CHECK (auth.uid() = user_id);
 
 DROP POLICY IF EXISTS "Users can view votes" ON public.issue_votes;
 CREATE POLICY "Users can view votes" ON public.issue_votes
@@ -550,7 +550,7 @@ CREATE POLICY "Users can delete their votes" ON public.issue_votes
 -- Comments - users can comment and view all comments
 DROP POLICY IF EXISTS "Users can create comments" ON public.comments;
 CREATE POLICY "Users can create comments" ON public.comments
-    FOR INSERT USING (auth.uid() = user_id);
+    FOR INSERT WITH CHECK (auth.uid() = user_id);
 
 DROP POLICY IF EXISTS "Users can view all comments" ON public.comments;
 CREATE POLICY "Users can view all comments" ON public.comments

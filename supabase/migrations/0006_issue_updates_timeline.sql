@@ -31,6 +31,14 @@ CREATE POLICY "Users can delete their own issue updates" ON issue_updates
     FOR DELETE USING (auth.uid() = user_id);
 
 -- Create a trigger to automatically create an issue update when issue status changes
+--
+-- NOTE: user_id originally used COALESCE(NEW.assigned_to, auth.uid()), which
+-- evaluates to NULL (violating the NOT NULL constraint on
+-- issue_updates.user_id) whenever an issue with no assigned_to is updated
+-- outside of an authenticated request context (e.g. a migration or other
+-- service-role bulk UPDATE, where auth.uid() is also NULL). Fixed to fall
+-- back to the issue's own reporter (NEW.user_id), which is NOT NULL on
+-- public.issues, guaranteeing a valid value.
 CREATE OR REPLACE FUNCTION create_issue_update_on_status_change()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -40,17 +48,17 @@ BEGIN
         VALUES (
             NEW.id,
             NEW.status,
-            CASE 
+            CASE
                 WHEN NEW.status = 'assigned' THEN 'Issue has been assigned for resolution'
                 WHEN NEW.status = 'in_progress' THEN 'Work has started on this issue'
                 WHEN NEW.status = 'resolved' THEN 'Issue has been resolved'
                 WHEN NEW.status = 'closed' THEN 'Issue has been closed'
                 ELSE 'Issue status updated'
             END,
-            COALESCE(NEW.assigned_to, auth.uid())
+            COALESCE(NEW.assigned_to, auth.uid(), NEW.user_id)
         );
     END IF;
-    
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;

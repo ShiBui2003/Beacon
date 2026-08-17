@@ -28,7 +28,18 @@ BEGIN
 END $$;
 
 -- Ensure admin_notifications table exists with all required columns
-DO $$ 
+--
+-- NOTE: public.admin_notifications was already created by
+-- 0004_admin_notifications.sql (with columns id, title, message, type,
+-- link, read, issue_id, created_at -- notably no admin_id or updated_at),
+-- so CREATE TABLE IF NOT EXISTS below is a no-op when migrations are
+-- applied in filename order. The original version of this migration only
+-- guarded adding is_read and assumed admin_id/updated_at would already be
+-- present from the CREATE TABLE, then unconditionally created an index on
+-- admin_id further down -- which fails against the pre-existing table.
+-- Fixed to guard-add admin_id and updated_at the same way is_read is
+-- guarded.
+DO $$
 BEGIN
     -- Create table if it doesn't exist
     CREATE TABLE IF NOT EXISTS public.admin_notifications (
@@ -42,16 +53,38 @@ BEGIN
         created_at TIMESTAMPTZ DEFAULT NOW(),
         updated_at TIMESTAMPTZ DEFAULT NOW()
     );
-    
+
     -- Add is_read column if it doesn't exist
     IF NOT EXISTS (
-        SELECT 1 FROM information_schema.columns 
-        WHERE table_name = 'admin_notifications' 
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'admin_notifications'
         AND column_name = 'is_read'
         AND table_schema = 'public'
     ) THEN
-        ALTER TABLE public.admin_notifications 
+        ALTER TABLE public.admin_notifications
         ADD COLUMN is_read BOOLEAN DEFAULT FALSE;
+    END IF;
+
+    -- Add admin_id column if it doesn't exist
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'admin_notifications'
+        AND column_name = 'admin_id'
+        AND table_schema = 'public'
+    ) THEN
+        ALTER TABLE public.admin_notifications
+        ADD COLUMN admin_id UUID REFERENCES public.profiles(id);
+    END IF;
+
+    -- Add updated_at column if it doesn't exist
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'admin_notifications'
+        AND column_name = 'updated_at'
+        AND table_schema = 'public'
+    ) THEN
+        ALTER TABLE public.admin_notifications
+        ADD COLUMN updated_at TIMESTAMPTZ DEFAULT NOW();
     END IF;
 END $$;
 

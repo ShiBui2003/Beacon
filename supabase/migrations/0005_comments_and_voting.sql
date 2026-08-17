@@ -126,7 +126,7 @@ CREATE TRIGGER trigger_dispute_comment_notification
 -- Add RLS policies for the new features
 -- Policy for issue votes (users can vote on any issue, but only see their own votes)
 CREATE POLICY "Users can vote on issues" ON public.issue_votes
-  FOR INSERT USING (auth.uid() = user_id);
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
 
 CREATE POLICY "Users can view their own votes" ON public.issue_votes
   FOR SELECT USING (auth.uid() = user_id);
@@ -136,7 +136,7 @@ CREATE POLICY "Users can update their own votes" ON public.issue_votes
 
 -- Policy for comments (users can comment on any issue and view all comments)
 CREATE POLICY "Users can create comments" ON public.comments
-  FOR INSERT USING (auth.uid() = user_id);
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
 
 CREATE POLICY "Users can view all comments" ON public.comments
   FOR SELECT USING (TRUE);
