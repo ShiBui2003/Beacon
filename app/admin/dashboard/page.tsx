@@ -494,7 +494,7 @@ const AdminDashboard = () => {
             .select(
                 `
         *,
-        profiles:user_id (
+        profiles!user_id (
           full_name,
           email
         )
