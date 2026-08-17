@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import Vapi from "@vapi-ai/web";
-import { useAuth } from "@/contexts/auth-context";
 
 interface VapiVoiceButtonProps {
     apiKey: string;
@@ -34,7 +33,6 @@ const VapiVoiceButton: React.FC<VapiVoiceButtonProps> = ({
         lat: latProp,
         lng: lngProp,
     });
-    const { user } = useAuth();
 
     useEffect(() => {
         const vapiInstance = new Vapi(apiKey);
@@ -96,10 +94,6 @@ const VapiVoiceButton: React.FC<VapiVoiceButtonProps> = ({
     }, [latProp, lngProp]);
 
     const handleVoiceToggle = async () => {
-        if (!user) {
-            console.warn("Vapi: cannot start a voice report while signed out.");
-            return;
-        }
         if (!vapi) return;
 
         if (isConnected) {
@@ -146,7 +140,6 @@ const VapiVoiceButton: React.FC<VapiVoiceButtonProps> = ({
                     ...extraVars,
                     lat: finalLat,
                     lng: finalLng,
-                    userId: user?.id ?? null,
                 };
 
                 // Start the call with variables
