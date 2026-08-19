@@ -76,9 +76,9 @@ The existing file mixes two patterns: raw hex vars (`--primary-green: #2e6a56`) 
 git rm styles/globals.css
 ```
 
-- [ ] **Step 2: Replace `app/globals.css`'s `:root` and `.dark` blocks**
+- [ ] **Step 2: Replace `app/globals.css`'s `:root` block**
 
-In `app/globals.css`, replace lines 6–74 (the entire `:root { ... }` block through the closing brace before `.dark {`) with:
+In `app/globals.css`, replace the entire `:root { ... }` block (originally lines 6–54, ending at the closing brace right before the blank line and `.dark {`) with:
 
 ```css
 :root {
@@ -94,16 +94,16 @@ In `app/globals.css`, replace lines 6–74 (the entire `:root { ... }` block thr
     --secondary: 246 45% 37%; /* #3C3489 — structural surfaces (nav, headers) */
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 252 50% 95%; /* #F1EFF9 */
-    --muted-foreground: 253 12% 42%; /* #6B6580 */
+    --muted: 252 45% 96%; /* #F1EFF9 */
+    --muted-foreground: 253 12% 45%; /* #6B6580 */
 
     --card: 0 0% 100%;
     --card-foreground: 245 47% 25%;
     --popover: 0 0% 100%;
     --popover-foreground: 245 47% 25%;
 
-    --border: 252 41% 92%; /* #E4E1F0 */
-    --input: 252 41% 92%;
+    --border: 252 33% 91%; /* #E4E1F0 */
+    --input: 252 33% 91%;
     --ring: 245 60% 67%; /* #7F77DD */
 
     --accent: 15 68% 52%; /* #D85A30 — coral, urgency/CTA only */
