@@ -150,7 +150,7 @@
     }
     body {
         @apply bg-background text-foreground;
-        font-family: "Poppins", "Inter", "Montserrat", sans-serif;
+        font-family: "Inter", sans-serif;
         transition: all ease-in-out 300ms, background 0.3s, color 0.3s;
     }
 
@@ -176,8 +176,8 @@
     }
 
     /* Custom Font Classes */
-    .font-poppins {
-        font-family: "Poppins", sans-serif;
+    .font-space-grotesk {
+        font-family: "Space Grotesk", sans-serif;
     }
 
     .font-inter {

@@ -1,14 +1,14 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Poppins, Inter } from "next/font/google"
+import { Space_Grotesk, Inter } from "next/font/google"
 import Script from "next/script"
 import "./globals.css"
 import { AuthProvider } from "@/contexts/auth-context"
 import { ToastProvider, ToastViewport } from "@/components/ui/toast"
 import VapiWidget from "@/components/VapiWidget"
 
-const poppins = Poppins({
-  variable: "--font-poppins",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 })
@@ -34,7 +34,7 @@ export default function RootLayout({
   const vapiAssistantId = process.env.NEXT_PUBLIC_VAPI_ASSISTANT_ID as string | undefined
   return (
     <html lang="en">
-      <body className={`${poppins.variable} ${inter.variable} overflow-x-hidden font-poppins`}>
+      <body className={`${spaceGrotesk.variable} ${inter.variable} overflow-x-hidden font-inter`}>
         <AuthProvider>
           {children}
           <ToastProvider>
