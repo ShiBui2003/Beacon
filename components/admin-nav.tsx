@@ -8,6 +8,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/contexts/auth-context";
+import ThemeToggle from "@/components/theme-toggle";
 import {
     BarChart3,
     Settings,
@@ -98,6 +99,7 @@ export default function AdminNav() {
 
                         {/* Desktop User Actions */}
                         <div className="hidden lg:flex lg:items-center lg:space-x-2 flex-shrink-0">
+                            <ThemeToggle />
                             <Button
                                 variant="default"
                                 size="sm"
@@ -233,6 +235,13 @@ export default function AdminNav() {
                                                 </div>
                                             </div>
 
+                                            <div className="flex items-center justify-between px-2 py-2">
+                                                <span className="text-sm text-muted-foreground">
+                                                    Theme
+                                                </span>
+                                                <ThemeToggle />
+                                            </div>
+
                                             <Button
                                                 variant="ghost"
                                                 className="w-full justify-start h-11 text-sm text-destructive hover:text-destructive hover:bg-destructive/10"
@@ -336,6 +345,13 @@ export default function AdminNav() {
                                                         {user?.email ?? ""}
                                                     </div>
                                                 </div>
+                                            </div>
+
+                                            <div className="flex items-center justify-between px-2 py-2">
+                                                <span className="text-sm text-muted-foreground">
+                                                    Theme
+                                                </span>
+                                                <ThemeToggle />
                                             </div>
 
                                             <Button

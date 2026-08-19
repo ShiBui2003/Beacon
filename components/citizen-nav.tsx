@@ -21,6 +21,7 @@ import {
 import RealTimeNotifications from "@/components/real-time-notifications";
 import { useAuth } from "@/contexts/auth-context";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import ThemeToggle from "@/components/theme-toggle";
 
 // Navigation items for desktop
 type NavItem = {
@@ -181,6 +182,7 @@ export default function CitizenNav() {
 
                         {/* Desktop User Actions */}
                         <div className="hidden lg:flex lg:items-center lg:space-x-2">
+                            <ThemeToggle />
                             {/* Additional Desktop Buttons */}
                             <div className="flex items-center space-x-1">
                                 <Button
@@ -399,6 +401,13 @@ export default function CitizenNav() {
                                                         {user?.email ?? ""}
                                                     </div>
                                                 </div>
+                                            </div>
+
+                                            <div className="flex items-center justify-between px-2 py-2">
+                                                <span className="text-sm text-muted-foreground">
+                                                    Theme
+                                                </span>
+                                                <ThemeToggle />
                                             </div>
 
                                             <Button
