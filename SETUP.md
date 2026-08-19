@@ -77,3 +77,26 @@ their original state; no webhook route exists in `app/api/`.
 - `NEXT_PUBLIC_SITE_URL` — `http://localhost:3000` for local dev, your
   Vercel production URL once deployed (Task 11). Used by the AI-urgency
   trigger in `POST /api/issues`.
+
+## Google OAuth sign-in (Supabase provider)
+
+This is separate from the Google Maps and Gemini keys above, and easy to
+miss — a brand-new Supabase project has Google sign-in **disabled** by
+default, only email/password works until this is done. Without it,
+`signInWithOAuth({ provider: "google" })` fails with `400
+validation_failed — "Unsupported provider: provider is not enabled"`,
+and no citizen or admin account can be created via Google at all.
+
+1. In Google Cloud Console → APIs & Services → Credentials, create (or
+   reuse an existing) OAuth 2.0 Client ID of type "Web application".
+2. Add to **Authorized redirect URIs**:
+   `https://rqroajihogcxrdsjglyj.supabase.co/auth/v1/callback`
+3. Add to **Authorized JavaScript origins**: your Vercel production URL
+   (e.g. `https://beacon-beige-delta.vercel.app`) and, for local dev,
+   `http://localhost:3000`.
+4. Copy the generated **Client ID** and **Client Secret**.
+5. In the Supabase dashboard → Authentication → Sign In / Providers →
+   find **Google**, toggle it on, paste the Client ID and Client Secret,
+   save.
+6. Retry Google sign-in on the deployed app — it should now redirect to
+   Google's consent screen instead of erroring.
