@@ -32,7 +32,10 @@ interface Department {
 }
 
 function UnifiedAuthPageInner() {
-  const [authMode, setAuthMode] = useState<AuthMode>("signin")
+  const searchParams = useSearchParams()
+  const [authMode, setAuthMode] = useState<AuthMode>(
+    searchParams.get("mode") === "signup" ? "signup" : "signin"
+  )
   const [selectedRole, setSelectedRole] = useState<UserRole>("citizen")
   const [selectedDepartment, setSelectedDepartment] = useState<string>("")
   const [roles, setRoles] = useState<Role[]>([])
@@ -52,7 +55,6 @@ function UnifiedAuthPageInner() {
   const { toast } = useToast()
   const { user, loading, signIn, signUp, signInWithGoogle } = useAuth()
   const router = useRouter()
-  const searchParams = useSearchParams()
 
   // Fetch roles and departments
   useEffect(() => {

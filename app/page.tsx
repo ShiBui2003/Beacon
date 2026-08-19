@@ -102,7 +102,7 @@ export default function HomePage() {
                                 className="text-[#2E6A56] hover:text-[#1f4a3a] font-medium flex items-center gap-2"
                             >
                                 <LogIn className="w-4 h-4" />
-                                Admin Login
+                                Sign In
                             </Link>
                         </div>
                     </div>
@@ -197,7 +197,7 @@ export default function HomePage() {
                                 className="text-[#2E6A56] hover:text-[#1f4a3a] font-medium text-lg flex items-center group transition-all duration-300"
                             >
                                 <Shield className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
-                                Admin Portal
+                                Sign In
                             </Link>
                         </div>
                     </div>
@@ -375,7 +375,7 @@ export default function HomePage() {
                                 className="text-emerald-100 hover:text-white font-medium text-lg flex items-center justify-center mx-auto group transition-all duration-300"
                             >
                                 <Lock className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
-                                Administrator Access
+                                Already have an account? Sign in
                             </Link>
                         </div>
                     </div>
@@ -417,7 +417,7 @@ export default function HomePage() {
                                     href="/auth?mode=login"
                                     className="block text-gray-400 hover:text-white transition-colors"
                                 >
-                                    Admin Portal
+                                    Sign In
                                 </Link>
                             </div>
                         </div>
