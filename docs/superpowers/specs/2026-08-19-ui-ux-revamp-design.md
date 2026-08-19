@@ -93,6 +93,7 @@ Tailwind v4 (CSS-first, `@theme inline` in `app/globals.css`, no `tailwind.confi
 --accent-tint: #FAECE7
 --warning: #E0A72E
 --success: #2F8F5B
+--destructive: #C23B3B
 ```
 
 **Dark mode:**
@@ -111,6 +112,7 @@ Tailwind v4 (CSS-first, `@theme inline` in `app/globals.css`, no `tailwind.confi
 --accent-tint: #3D2A26
 --warning: #E0A72E
 --success: #3AA873
+--destructive: #C23B3B
 ```
 
 **Typography:** Space Grotesk (headings) / Inter (body), via `next/font/google`, replacing Poppins/Inter in `app/layout.tsx`.
@@ -167,7 +169,7 @@ Card-centered layout stays; Signal tokens applied to the segmented Sign In/Sign 
 KPI cards restyled with Signal gradient treatment (indigo, not the current green), `AIUrgencyBadge` recolored (high urgency → `--accent` coral, medium → `--warning`, low → `--success` — replacing the current ad hoc red/yellow/green). List/map toggle becomes a proper segmented control. GSAP: KPI-card stagger-in on mount, list-card batch reveal on scroll. Framer Motion: card hover-lift, filter-bar `Select` open/close, view-toggle transition. Skeleton loading replaces the current plain "Loading issues…" text.
 
 ### Report form (`/citizen/report`)
-The most form-heavy screen — no field, tab, or button removed. Quick-photo card keeps its "hero" treatment but recolored (coral reserved for the AI-processing state indicator only, not the whole card — indigo/neutral base instead of today's amber/orange gradient, since coral is reserved for urgency per the brief). Text/Audio `Tabs` restyled; recording state (red pulsing dot + timer) is the one place a non-palette red stays, since it signals active recording, not urgency — flagged for your call in section 6. Framer Motion: photo-upload success-banner slide-in, tab content cross-fade, form-field focus-ring animation (`--ring` token), submit-button loading state. `MapPicker` gets updated marker/pin styling to match Signal (pin color = `--accent`, matching how urgent issues are tagged elsewhere).
+The most form-heavy screen — no field, tab, or button removed. Quick-photo card keeps its "hero" treatment but recolored (coral reserved for the AI-processing state indicator only, not the whole card — indigo/neutral base instead of today's amber/orange gradient, since coral is reserved for urgency per the brief). Text/Audio `Tabs` restyled; recording state (pulsing dot + timer) uses the new `--destructive` token (section 6), distinct from `--accent` coral since it signals active recording, not issue urgency. Framer Motion: photo-upload success-banner slide-in, tab content cross-fade, form-field focus-ring animation (`--ring` token), submit-button loading state. `MapPicker` gets updated marker/pin styling to match Signal (pin color = `--accent`, matching how urgent issues are tagged elsewhere).
 
 ### Citizen issue lists & detail (`/citizen/issues`, `/citizen/my-issues` [+ `[id]`], `/citizen/issues/[id]`)
 Status `Badge`s and `Progress` bars remapped to Signal status-color system (section 2). Tabs (Active/Resolved) restyled. Detail sidebar pattern (select-a-card → detail panel) gets a Framer Motion slide/fade transition instead of an instant content swap. `IssueStatusTracker`'s vertical timeline restyled with Signal connecting-line/icon colors, each stage-completion transition animated (not just instant highlight-jump). `IssueCommentsAndVoting`: upvote/downvote button press feedback, comment-list stagger-in.
@@ -191,7 +193,7 @@ Table restyled (row hover state, status/priority `Badge`s via Signal status colo
 User cards restyled; Suspend/Activate buttons get the same visual hover/press treatment as any other button **but remain non-functional** — this preserves current behavior exactly, per "functionally wired exactly as-is." Notifications Send/History tabs restyled, live preview card updates with a subtle cross-fade as fields change. Reports: date-range `Popover`+`Calendar` restyled to Signal tokens, report-card list gets GSAP stagger-in.
 
 ### Global shell (`citizen-nav`, `admin-nav`, `VapiWidget`, toasts, all dialogs/sheets app-wide)
-Nav bars: Signal `--secondary` background (indigo, replacing today's white/green), active-route indicator restyled, mobile `Sheet` slide-in gets a refined Framer Motion transition (replacing the current CSS-keyframe `slideIn`), theme toggle added (light/dark). `VapiWidget`: idle/connecting/listening/speaking states rebuilt as Framer Motion `AnimatePresence` variants — idle = `--primary` indigo (not today's arbitrary blue `#2563eb`), listening = `--success` green, speaking = `--accent` coral (repurposing "active/attention" coral here is the one exception to "CTA/urgent only," flagged for your call in section 6), connecting = neutral spinner. All toasts (`components/ui/toast.tsx`) restyled + Framer Motion enter/exit, replacing Radix's default transition.
+Nav bars: Signal `--secondary` background (indigo, replacing today's white/green), active-route indicator restyled, mobile `Sheet` slide-in gets a refined Framer Motion transition (replacing the current CSS-keyframe `slideIn`), theme toggle added (light/dark). `VapiWidget`: idle/connecting/listening/speaking states rebuilt as Framer Motion `AnimatePresence` variants — idle = `--primary` indigo (not today's arbitrary blue `#2563eb`), connecting = neutral spinner, listening = `--success` green, speaking = a brighter/pulsing treatment of `--primary` (keeps coral 100% reserved for urgency/CTA, per section 6). All toasts (`components/ui/toast.tsx`) restyled + Framer Motion enter/exit, replacing Radix's default transition.
 
 ---
 
@@ -210,10 +212,12 @@ No other new dependencies.
 
 ---
 
-## 6. Open calls for your review (flagged during planning, not yet decided)
+## 6. Resolved: coral-exclusivity edge cases
 
-1. **Recording-active red** (report form's audio recorder) and **destructive-action red** (delete-account confirm) both need a red outside the Signal palette (coral is reserved for urgency/CTA only, per your brief). Proposing a single neutral `--destructive: #C23B3B` token, distinct from `--accent` coral, used only for these two non-urgency "danger" cases. Confirm or adjust.
-2. **VapiWidget's "speaking" state** repurposes coral (`--accent`) for an active-voice indicator, not urgency/CTA. This is a deliberate exception noted above — confirm it's acceptable, or should "speaking" use a different color (e.g. `--primary`) to keep coral 100% reserved.
+Both decided — coral (`--accent`) stays 100% reserved for urgency tags and CTAs, no exceptions:
+
+1. **Destructive-red token added**: `--destructive: #C23B3B` (light and dark mode, same value — a danger signal shouldn't shift with theme), used only for the report form's active-recording indicator and the delete-account confirm button. Both are "danger/active" states unrelated to issue urgency, so they get their own token rather than borrowing coral.
+2. **VapiWidget "speaking" state uses `--primary` indigo**, not coral — idle/connecting/listening/speaking states are now: idle = `--primary`, connecting = neutral spinner, listening = `--success`, speaking = `--primary` (a brighter/pulsing treatment of the same indigo, distinguishing it from idle without reaching for coral).
 
 ## Non-goals (explicitly out of scope this pass)
 
