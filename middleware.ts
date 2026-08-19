@@ -16,8 +16,6 @@ const publicRoutes = [
     "/api/departments",
     "/api/transcribe",
     "/api/translate",
-    "/api/test-db-setup",
-    "/api/test-hf-deployment",
     "/api/verify-issue",
     "/api/analyze-photo",
     "/_next",

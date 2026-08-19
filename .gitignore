@@ -31,3 +31,6 @@ zip2
 next-env.d.ts
 
 .vscode
+
+# OS
+.DS_Store

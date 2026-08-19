@@ -643,53 +643,46 @@ Environment Variables for production (Task 11).
   Razorpay checkout widget).
 
 ## Vapi
-- Sign up at https://vapi.ai.
-- Create an Assistant. System prompt should instruct it to collect, in
-  conversation, a civic issue's: title, a one-to-two sentence description,
-  and a category (must be one of the department names visible in this
-  project's `departments` table — ask the assistant to read them back to
-  the citizen and confirm before submitting).
-- Add a custom Tool to the assistant with this function schema (this must
-  match what `app/api/vapi/webhook/route.ts` expects exactly):
 
-  ```json
-  {
-    "type": "function",
-    "function": {
-      "name": "submit_issue",
-      "description": "Submit a verified civic issue report",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "title": { "type": "string" },
-          "description": { "type": "string" },
-          "category": { "type": "string" }
-        },
-        "required": ["title", "description", "category"]
-      }
-    },
-    "server": {
-      "url": "https://<your-deployed-domain>/api/vapi/webhook"
-    }
-  }
-  ```
+**Architecture note:** this was originally planned as a Next.js webhook
+(`/api/vapi/webhook`), but you already had a pre-built Vapi assistant
+("civic", id `5a9640cd-3c4f-4053-ade4-c23a27b876fe`) whose `send_report`
+Tool calls a Supabase Postgres RPC function directly over PostgREST —
+no Next.js server involved at all. We matched that instead of building a
+parallel path: `supabase/migrations/0029_anon_report_rpc.sql` recreates
+`public.api_create_issue_anon_by_dept(p_lat, p_lng, p_title, p_priority,
+p_description, p_department_name DEFAULT NULL, p_assign DEFAULT FALSE)`
+in the new `beacon` project, granted to `anon` — so voice reports need no
+signed-in user. `0030_fix_notification_trigger_null_user.sql` fixes a
+notification trigger that would otherwise throw when `p_assign=true`
+inserts an anonymous (`user_id IS NULL`) issue. The webhook route and the
+`userId`-passing change to `VapiWidget.tsx` were built, then reverted
+(commits `8cb7388`/`4314199` reverted by `bd08cb3`/`d8a7712`) once this
+became clear — `VapiWidget.tsx` and `middleware.ts` are unchanged from
+their original state; no webhook route exists in `app/api/`.
 
-  Note `lat`, `lng`, and `userId` are NOT part of the tool's declared
-  parameters — the assistant doesn't know them. They're injected by
-  `VapiWidget.tsx` into the call's `variableValues` at call start (see
-  Task 7) and Vapi automatically merges call variables into every tool
-  call's arguments alongside what the assistant fills in.
-- `NEXT_PUBLIC_VAPI_API_KEY` — Vapi dashboard → your public/web key.
-- `NEXT_PUBLIC_VAPI_ASSISTANT_ID` — the assistant's id.
-- `VAPI_WEBHOOK_SECRET` — make up a long random string yourself, set it
-  here AND in the Vapi Tool's server config as a custom header
-  `x-vapi-secret`, so random internet traffic can't POST fake issues to
-  your webhook.
+- The assistant already exists — nothing to create at vapi.ai. In its
+  dashboard, open the `send_report` Tool's HTTP request config and update
+  two fields to point at the new `beacon` project instead of the dead one:
+  - **Request URL** → `https://rqroajihogcxrdsjglyj.supabase.co/rest/v1/rpc/api_create_issue_anon_by_dept`
+  - **Authorization header** → the new project's `anon` key (from
+    `NEXT_PUBLIC_SUPABASE_ANON_KEY` below), typically as both `apikey:
+    <anon key>` and `Authorization: Bearer <anon key>` headers (PostgREST's
+    usual pair) — check what header names the existing Tool config uses
+    and update their values, don't change the header names/shape.
+  - Leave the Tool's parameter schema (`p_lat`, `p_lng`, `p_title`,
+    `p_priority`, `p_description`, `p_department_name`, `p_assign`)
+    exactly as it already is — it already matches the recreated function.
+- `NEXT_PUBLIC_VAPI_API_KEY` — Vapi dashboard → your public/web key. Prior
+  value on file: `3a9f1c6f-607d-48b8-86e4-d75d111dd171` (confirm it's
+  still valid in the dashboard before using it).
+- `NEXT_PUBLIC_VAPI_ASSISTANT_ID` — `5a9640cd-3c4f-4053-ade4-c23a27b876fe`
+  (the "civic" assistant).
 
 ## Site URL
 - `NEXT_PUBLIC_SITE_URL` — `http://localhost:3000` for local dev, your
   Vercel production URL once deployed (Task 11). Used by the AI-urgency
-  trigger and the Vapi webhook's internal fetch to `/api/verify-issue`.
+  trigger in `POST /api/issues`.
 ```
 
 - [ ] **Step 2: Commit**
