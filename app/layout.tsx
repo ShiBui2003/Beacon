@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Space_Grotesk, Inter } from "next/font/google"
 import Script from "next/script"
 import "./globals.css"
+import { ThemeProvider } from "@/components/theme-provider"
 import { AuthProvider } from "@/contexts/auth-context"
 import { ToastProvider, ToastViewport } from "@/components/ui/toast"
 import VapiWidget from "@/components/VapiWidget"
@@ -35,14 +36,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${spaceGrotesk.variable} ${inter.variable} overflow-x-hidden font-inter`}>
-        <AuthProvider>
-          {children}
-          <ToastProvider>
-            <ToastViewport />
-          </ToastProvider>
-          {/* Global sticky voice widget (renders once, bottom-right) */}
-          {vapiApiKey && vapiAssistantId ? <VapiWidget apiKey={vapiApiKey} assistantId={vapiAssistantId} /> : null}
-        </AuthProvider>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+          <AuthProvider>
+            {children}
+            <ToastProvider>
+              <ToastViewport />
+            </ToastProvider>
+            {/* Global sticky voice widget (renders once, bottom-right) */}
+            {vapiApiKey && vapiAssistantId ? <VapiWidget apiKey={vapiApiKey} assistantId={vapiAssistantId} /> : null}
+          </AuthProvider>
+        </ThemeProvider>
 
         {/* Razorpay Checkout Script */}
         <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
