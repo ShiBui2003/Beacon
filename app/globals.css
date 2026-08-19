@@ -16,16 +16,16 @@
     --secondary: 246 45% 37%; /* #3C3489 — structural surfaces (nav, headers) */
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 252 50% 95%; /* #F1EFF9 */
-    --muted-foreground: 253 12% 42%; /* #6B6580 */
+    --muted: 252 45% 96%; /* #F1EFF9 */
+    --muted-foreground: 253 12% 45%; /* #6B6580 */
 
     --card: 0 0% 100%;
     --card-foreground: 245 47% 25%;
     --popover: 0 0% 100%;
     --popover-foreground: 245 47% 25%;
 
-    --border: 252 41% 92%; /* #E4E1F0 */
-    --input: 252 41% 92%;
+    --border: 252 33% 91%; /* #E4E1F0 */
+    --input: 252 33% 91%;
     --ring: 245 60% 67%; /* #7F77DD */
 
     --accent: 15 68% 52%; /* #D85A30 — coral, urgency/CTA only */
