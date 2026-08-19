@@ -4,77 +4,107 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-    /* Updated to Janmarg's professional green palette */
-    --primary-green: #2e6a56; /* Primary Green */
-    --secondary-green: #5c9479; /* Secondary Green */
-    --neutral-gray: #4a4a4a; /* Dark gray for body text */
-    --light-gray: #efefef; /* Light gray for backgrounds */
-    --clean-white: #ffffff; /* Pure white */
+    /* Signal palette — indigo structure + coral accent (reserved for
+       urgency tags and primary CTAs only) */
+    --background: #ffffff;
+    --foreground: 245 47% 25%; /* #26215C */
 
-    /* Updated System Colors */
-    --background: #f3f4f6; /* Light Gray background */
-    --foreground: #1f2937; /* Dark Gray text for better contrast */
-    --brand: #2e6a56;
-    --brand-dark: #1f4a3a;
-    --color-primary: #2e6a56;
-    --color-secondary: #5c9479;
-    --muted: #6b7280;
-    --muted-foreground: #4b5563;
-    --color-accent: #f9fafb;
-    --color-surface: #ffffff;
-    --color-border: #e5e7eb;
-    --color-text: #1f2937;
-    --color-muted: #6b7280;
+    --primary: 245 43% 50%; /* #534AB7 */
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 246 45% 37%; /* #3C3489 */
 
-    /* Tailwind CSS Variables - Updated for Green Theme */
-    --primary: 151 42% 29%; /* #2E6A56 converted to HSL */
-    --primary-foreground: 0 0% 100%; /* White */
-    --secondary: 151 25% 53%; /* #5C9479 converted to HSL */
+    --secondary: 246 45% 37%; /* #3C3489 — structural surfaces (nav, headers) */
     --secondary-foreground: 0 0% 100%;
-    --accent: 0 0% 98%; /* #F9FAFB - lighter accent */
-    --accent-foreground: 220 13% 18%; /* #1F2937 - darker text */
-    --muted: 220 13% 42%; /* Darker muted */
-    --muted-foreground: 220 14% 38%; /* Much darker for better visibility - #525f6d */
-    --card: 0 0% 100%; /* Pure White */
-    --card-foreground: 220 13% 18%; /* #1F2937 - darker text */
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 13% 18%;
-    --border: 220 13% 91%; /* #E5E7EB - softer border */
-    --input: 220 13% 91%;
-    --ring: 151 42% 29%; /* Primary Green */
-    --destructive: 0 84% 60%; /* Red */
-    --destructive-foreground: 0 0% 100%; /* White */
-    --radius: 0.75rem;
 
-    /* Status colors for issue tracking */
-    --status-submitted: 0 0% 56%;
-    --status-review: 151 42% 29%;
-    --status-progress: 196 90% 50%;
-    --status-resolved: 141 71% 40%;
+    --muted: 252 50% 95%; /* #F1EFF9 */
+    --muted-foreground: 253 12% 42%; /* #6B6580 */
+
+    --card: 0 0% 100%;
+    --card-foreground: 245 47% 25%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 245 47% 25%;
+
+    --border: 252 41% 92%; /* #E4E1F0 */
+    --input: 252 41% 92%;
+    --ring: 245 60% 67%; /* #7F77DD */
+
+    --accent: 15 68% 52%; /* #D85A30 — coral, urgency/CTA only */
+    --accent-foreground: 0 0% 100%;
+    --accent-tint: 15 66% 94%; /* #FAECE7 */
+
+    --warning: 41 74% 53%; /* #E0A72E */
+    --success: 148 50% 37%; /* #2F8F5B */
+    --destructive: 0 53% 50%; /* #C23B3B */
+    --destructive-foreground: 0 0% 100%;
+
+    --radius: 0.625rem; /* 10px, backs --radius-md below */
+    --radius-sm: 0.375rem; /* 6px */
+    --radius-md: 0.625rem; /* 10px */
+    --radius-lg: 1rem; /* 16px */
+    --radius-full: 9999px;
+
+    --shadow-sm: 0 1px 2px rgba(38, 33, 92, 0.06);
+    --shadow-md: 0 4px 12px rgba(38, 33, 92, 0.08);
+    --shadow-lg: 0 12px 32px rgba(38, 33, 92, 0.12);
+
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+    --space-7: 48px;
+    --space-8: 64px;
+
+    /* Status colors for issue tracking — same variable names as before,
+       Signal-derived values so every .status-* and .bg-status-* usage across
+       the app (unchanged in this phase) picks up the new palette automatically */
+    --status-submitted: 253 12% 55%; /* neutral, muted-foreground family */
+    --status-review: 245 43% 50%; /* --primary */
+    --status-progress: 246 45% 37%; /* --secondary */
+    --status-resolved: 148 50% 37%; /* --success */
 }
 
 .dark {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --primary: 151 42% 29%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 151 25% 53%;
-    --secondary-foreground: 0 0% 100%;
-    --accent: 151 42% 15%;
-    --accent-foreground: 151 42% 85%;
-    --card: 215 25% 11%;
-    --card-foreground: 210 20% 95%;
-    --popover: 215 25% 11%;
-    --popover-foreground: 210 20% 95%;
-    --border: 215 25% 20%;
-    --input: 215 25% 20%;
-    --ring: 151 42% 29%;
-    --destructive: 0 72% 51%; /* Darker Red */
+    --background: 245 47% 25%; /* #26215C — dark-mode surface base */
+    --foreground: 258 41% 97%; /* #F5F3FA */
+
+    --primary: 245 60% 67%; /* #7F77DD — lighter indigo for contrast on dark */
+    --primary-foreground: 245 47% 25%;
+    --primary-hover: 245 43% 50%;
+
+    --secondary: 246 45% 37%; /* #3C3489 — elevated panels/cards */
+    --secondary-foreground: 258 41% 97%;
+
+    --muted: 245 43% 30%; /* #322C6E */
+    --muted-foreground: 248 37% 77%; /* #B3ADD9 */
+
+    --card: 246 45% 37%;
+    --card-foreground: 258 41% 97%;
+    --popover: 246 45% 37%;
+    --popover-foreground: 258 41% 97%;
+
+    --border: 246 40% 40%; /* #453D8F */
+    --input: 246 40% 40%;
+    --ring: 245 60% 67%;
+
+    --accent: 15 68% 52%; /* same coral, both modes per spec */
+    --accent-foreground: 0 0% 100%;
+    --accent-tint: 11 23% 19%; /* #3D2A26 */
+
+    --warning: 41 74% 53%;
+    --success: 151 49% 44%; /* #3AA873 */
+    --destructive: 0 53% 50%; /* same value both modes — a danger signal shouldn't shift with theme */
     --destructive-foreground: 0 0% 100%;
+
+    --status-submitted: 248 37% 77%;
+    --status-review: 245 60% 67%;
+    --status-progress: 246 45% 37%;
+    --status-resolved: 151 49% 44%;
 }
 
 @theme inline {
-    --font-sans: "Poppins", "Inter", "Montserrat", sans-serif;
+    --font-sans: "Space Grotesk", "Inter", sans-serif;
     --font-mono: "Geist Mono";
     --color-background: var(--background);
     --color-foreground: var(--foreground);
@@ -836,6 +866,31 @@
         transform: scale(1);
         opacity: 1;
     }
+}
+
+/* Signal design-token utilities — radius/shadow/spacing as real tokens,
+   for use alongside Tailwind's own utilities where a component needs the
+   exact system value rather than a Tailwind scale step. */
+.radius-sm {
+    border-radius: var(--radius-sm);
+}
+.radius-md {
+    border-radius: var(--radius-md);
+}
+.radius-lg {
+    border-radius: var(--radius-lg);
+}
+.radius-full {
+    border-radius: var(--radius-full);
+}
+.shadow-signal-sm {
+    box-shadow: var(--shadow-sm);
+}
+.shadow-signal-md {
+    box-shadow: var(--shadow-md);
+}
+.shadow-signal-lg {
+    box-shadow: var(--shadow-lg);
 }
 
 .animate-bounce-in {
