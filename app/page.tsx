@@ -149,7 +149,7 @@ export default function HomePage() {
                     style={{ animationDelay: "2s" }}
                 ></div>
                 <div
-                    className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-gradient-to-br from-green-300/8 to-teal-400/8 rounded-full blur-3xl animate-pulse"
+                    className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-gradient-to-br from-primary/8 to-accent/8 rounded-full blur-3xl animate-pulse"
                     style={{ animationDelay: "1s" }}
                 ></div>
                 <div
@@ -205,7 +205,7 @@ export default function HomePage() {
                     </div>
 
                     <div
-                        className="absolute top-1/3 right-1/4 w-6 h-6 text-emerald-600/70 animate-pulse"
+                        className="absolute top-1/3 right-1/4 w-6 h-6 text-accent/70 animate-pulse"
                         style={{
                             animationDelay: "1s",
                             animationDuration: "3s",
@@ -221,7 +221,7 @@ export default function HomePage() {
                     </div>
 
                     <div
-                        className="absolute top-1/2 left-16 w-7 h-7 text-green-700/50 animate-pulse"
+                        className="absolute top-1/2 left-16 w-7 h-7 text-secondary/50 animate-pulse"
                         style={{
                             animationDelay: "3s",
                             animationDuration: "3.5s",
