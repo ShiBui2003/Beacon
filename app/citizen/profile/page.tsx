@@ -232,11 +232,11 @@ export default function ProfilePage() {
         profileData.full_name || user?.email?.split("@")[0] || "User";
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50/30">
+        <div className="min-h-screen bg-background">
             <div className="container mx-auto px-4 py-8 max-w-6xl">
                 <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900">Profile</h1>
-                    <p className="text-gray-600">
+                    <h1 className="text-3xl font-bold text-foreground font-space-grotesk">Profile</h1>
+                    <p className="text-muted-foreground">
                         Manage your account information and settings
                     </p>
                 </div>
@@ -244,7 +244,7 @@ export default function ProfilePage() {
                 <div className="grid gap-6 lg:grid-cols-3">
                     {/* Profile Overview */}
                     <div className="lg:col-span-1">
-                        <Card className="bg-white/95 backdrop-blur-sm shadow-lg border-0">
+                        <Card className="bg-card/95 backdrop-blur-sm shadow-lg border-0">
                             <CardContent className="pt-6">
                                 <div className="flex flex-col items-center text-center">
                                 <div className="relative mb-4">
@@ -280,7 +280,7 @@ export default function ProfilePage() {
                                             />
                                             <label
                                                 htmlFor="avatar-upload"
-                                                className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-[#2E6A56] to-emerald-600 text-white rounded-full cursor-pointer hover:shadow-lg transition-all duration-300"
+                                                className="flex items-center justify-center w-8 h-8 bg-primary text-primary-foreground rounded-full cursor-pointer hover:shadow-lg transition-all duration-300"
                                             >
                                                 {uploading ? (
                                                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -303,7 +303,7 @@ export default function ProfilePage() {
                                 <div className="flex flex-col gap-2 mb-4">
                                     <Badge
                                         variant="secondary"
-                                        className="w-fit bg-gradient-to-r from-[#2E6A56]/10 to-emerald-100 text-[#2E6A56] border-0"
+                                        className="w-fit bg-primary/10 text-primary border-0"
                                     >
                                         {userRole === "admin"
                                             ? "Administrator"
@@ -312,7 +312,7 @@ export default function ProfilePage() {
                                     {userDepartmentName && (
                                         <Badge
                                             variant="outline"
-                                            className="w-fit border-[#2E6A56]/30 text-[#2E6A56]"
+                                            className="w-fit border-primary/30 text-primary"
                                         >
                                             {userDepartmentName}
                                         </Badge>
@@ -324,7 +324,7 @@ export default function ProfilePage() {
                                         onClick={() => setIsEditing(true)}
                                         variant="outline"
                                         size="sm"
-                                        className="border-[#2E6A56]/30 text-[#2E6A56] hover:bg-[#2E6A56]/10"
+                                        className="border-primary/30 text-primary hover:bg-primary/10"
                                     >
                                         <Edit className="w-4 h-4 mr-2" />
                                         Edit Profile
@@ -335,7 +335,7 @@ export default function ProfilePage() {
                                             onClick={handleSave}
                                             disabled={loading}
                                             size="sm"
-                                            className="bg-gradient-to-r from-[#2E6A56] to-emerald-600 hover:from-[#1f4a3a] hover:to-emerald-700"
+                                            className="bg-accent hover:brightness-90 text-accent-foreground"
                                         >
                                             <Save className="w-4 h-4 mr-2" />
                                             {loading ? "Saving..." : "Save"}
@@ -344,7 +344,7 @@ export default function ProfilePage() {
                                             onClick={() => setIsEditing(false)}
                                             variant="outline"
                                             size="sm"
-                                            className="border-[#2E6A56]/30 text-[#2E6A56] hover:bg-[#2E6A56]/10"
+                                            className="border-primary/30 text-primary hover:bg-primary/10"
                                         >
                                             <X className="w-4 h-4 mr-2" />
                                             Cancel

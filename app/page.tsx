@@ -5,6 +5,7 @@ import Link from "next/link"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useGSAP } from "@gsap/react"
+import { ThemeProvider } from "@/components/theme-provider"
 
 interface Phase {
     label: string
@@ -164,6 +165,12 @@ export default function HomePage() {
     const phase = PHASES[phaseIndex]
 
     return (
+        // The Beacon landing page was designed as a light-only surface (per
+        // the approved mockup) -- it never had a dark variant considered.
+        // Force light here regardless of the site-wide theme toggle (which
+        // still works normally on citizen/admin), rather than trying to
+        // patch contrast for a dark mode this page was never designed for.
+        <ThemeProvider forcedTheme="light">
         <div className="min-h-screen bg-background text-foreground">
             {/* Nav */}
             <nav className="sticky top-0 z-20 flex items-center justify-between h-[76px] px-6 md:px-12 bg-background border-b border-border">
@@ -555,5 +562,6 @@ export default function HomePage() {
                 </span>
             </footer>
         </div>
+        </ThemeProvider>
     )
 }

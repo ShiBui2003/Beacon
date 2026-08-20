@@ -21,7 +21,6 @@ import {
 import RealTimeNotifications from "@/components/real-time-notifications";
 import { useAuth } from "@/contexts/auth-context";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import ThemeToggle from "@/components/theme-toggle";
 
 // Navigation items for desktop
 type NavItem = {
@@ -169,11 +168,11 @@ export default function CitizenNav() {
                             href="/citizen/dashboard"
                             className="flex items-center space-x-2 flex-shrink-0 group"
                         >
-                            <div className="w-10 h-10 bg-gradient-to-br from-[#2E6A56] to-emerald-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300">
-                                <Home className="w-5 h-5 text-white" />
+                            <div className="w-10 h-10 bg-foreground flex items-center justify-center relative">
+                                <div className="absolute left-1/2 top-1/2 w-3 h-3 bg-accent -translate-x-1/2 -translate-y-1/2" />
                             </div>
-                            <span className="font-bold text-base sm:text-lg text-[#2E6A56]">
-                                JANMARG
+                            <span className="font-space-grotesk font-bold text-base sm:text-lg text-foreground">
+                                BEACON
                             </span>
                         </Link>
 
@@ -182,7 +181,6 @@ export default function CitizenNav() {
 
                         {/* Desktop User Actions */}
                         <div className="hidden lg:flex lg:items-center lg:space-x-2">
-                            <ThemeToggle />
                             {/* Additional Desktop Buttons */}
                             <div className="flex items-center space-x-1">
                                 <Button
@@ -228,7 +226,7 @@ export default function CitizenNav() {
                                 <Button
                                     variant="default"
                                     size="sm"
-                                    className="h-9 bg-primary hover:bg-[#1f4a3a] text-primary-foreground px-4"
+                                    className="h-9 bg-primary hover:bg-primary-hover text-primary-foreground px-4"
                                     asChild
                                 >
                                     <Link
@@ -403,12 +401,6 @@ export default function CitizenNav() {
                                                 </div>
                                             </div>
 
-                                            <div className="flex items-center justify-between px-2 py-2">
-                                                <span className="text-sm text-muted-foreground">
-                                                    Theme
-                                                </span>
-                                                <ThemeToggle />
-                                            </div>
 
                                             <Button
                                                 variant="ghost"

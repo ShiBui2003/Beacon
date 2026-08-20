@@ -729,17 +729,17 @@ export default function ReportIssuePage() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50/30">
+        <div className="min-h-screen bg-background">
             <div className="responsive-container py-8">
                 <div className="max-w-4xl mx-auto">
                     <div className="text-center mb-8">
-                        <div className="inline-block p-3 bg-gradient-to-br from-[#2E6A56]/10 to-emerald-100 rounded-2xl mb-4">
-                            <AlertCircle className="w-8 h-8 text-[#2E6A56]" />
+                        <div className="inline-block p-3 bg-primary/10 rounded-2xl mb-4">
+                            <AlertCircle className="w-8 h-8 text-primary" />
                         </div>
-                        <h1 className="responsive-heading-1 mb-3 bg-gradient-to-r from-[#2E6A56] to-emerald-600 bg-clip-text text-transparent">
+                        <h1 className="responsive-heading-1 mb-3 font-space-grotesk font-bold text-foreground">
                             Report an Issue
                         </h1>
-                        <p className="responsive-body text-gray-600 max-w-2xl mx-auto">
+                        <p className="responsive-body text-muted-foreground max-w-2xl mx-auto">
                             Help improve your community by reporting issues that
                             need attention. Every report makes a difference! 🌟
                         </p>
@@ -855,12 +855,12 @@ export default function ReportIssuePage() {
                         </div>
                     )}
 
-                    <Card className="bg-white/95 backdrop-blur-sm shadow-xl border-0 overflow-hidden">
-                        <div className="h-1 bg-gradient-to-r from-[#2E6A56] via-emerald-500 to-[#2E6A56]"></div>
+                    <Card className="bg-card shadow-xl border-0 overflow-hidden">
+                        <div className="h-1 bg-primary"></div>
                         <CardHeader>
                             <div className="flex items-center gap-3">
-                                <div className="p-2 bg-gradient-to-br from-[#2E6A56]/10 to-emerald-100 rounded-lg">
-                                    <AlertCircle className="w-5 h-5 text-[#2E6A56]" />
+                                <div className="p-2 bg-primary/10 rounded-lg">
+                                    <AlertCircle className="w-5 h-5 text-primary" />
                                 </div>
                                 <div>
                                     <CardTitle className="text-gray-900">
@@ -1390,7 +1390,7 @@ export default function ReportIssuePage() {
                                                 formData.location_lng
                                             )
                                         }
-                                        className="responsive-button flex-1 bg-gradient-to-r from-[#2E6A56] to-emerald-600 hover:from-[#1f4a3a] hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="responsive-button flex-1 bg-accent hover:brightness-90 text-white shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         {isSubmitting
                                             ? "Submitting..."

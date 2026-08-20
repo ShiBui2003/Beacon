@@ -553,12 +553,12 @@ const AdminDashboard = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900">
+        <div className="min-h-screen bg-background">
             {/* Mobile Menu Toggle */}
-            <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-white dark:bg-slate-950 border-b">
+            <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-card border-b border-border">
                 <div className="flex items-center justify-between px-4 py-3">
-                    <h1 className="text-xl font-bold text-accent">
-                        JanPath Admin
+                    <h1 className="text-xl font-space-grotesk font-bold text-accent">
+                        Beacon Admin
                     </h1>
                     <button
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -574,13 +574,13 @@ const AdminDashboard = () => {
                 <div
                     className={`${
                         mobileMenuOpen ? "block" : "hidden"
-                    } md:block fixed md:relative top-14 md:top-0 left-0 right-0 md:w-64 bg-white dark:bg-slate-950 border-r shadow-lg md:shadow-none transition-all duration-300 z-40 md:z-auto`}
+                    } md:block fixed md:relative top-14 md:top-0 left-0 right-0 md:w-64 bg-card border-r border-border shadow-lg md:shadow-none transition-all duration-300 z-40 md:z-auto`}
                 >
                     <div className="p-4 md:p-6 space-y-6">
                         {/* Sidebar Header */}
                         <div className="hidden md:block">
-                            <h2 className="text-2xl font-bold text-accent mb-2">
-                                JanPath
+                            <h2 className="text-2xl font-space-grotesk font-bold text-accent mb-2">
+                                Beacon
                             </h2>
                             <p className="text-sm text-muted-foreground">
                                 Admin Panel

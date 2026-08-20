@@ -8,7 +8,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/contexts/auth-context";
-import ThemeToggle from "@/components/theme-toggle";
 import {
     BarChart3,
     Settings,
@@ -99,11 +98,10 @@ export default function AdminNav() {
 
                         {/* Desktop User Actions */}
                         <div className="hidden lg:flex lg:items-center lg:space-x-2 flex-shrink-0">
-                            <ThemeToggle />
                             <Button
                                 variant="default"
                                 size="sm"
-                                className="h-9 bg-primary hover:bg-[#1f4a3a] text-primary-foreground px-3 xl:px-4 text-sm"
+                                className="h-9 bg-primary hover:bg-primary-hover text-primary-foreground px-3 xl:px-4 text-sm"
                                 asChild
                             >
                                 <Link
@@ -235,13 +233,6 @@ export default function AdminNav() {
                                                 </div>
                                             </div>
 
-                                            <div className="flex items-center justify-between px-2 py-2">
-                                                <span className="text-sm text-muted-foreground">
-                                                    Theme
-                                                </span>
-                                                <ThemeToggle />
-                                            </div>
-
                                             <Button
                                                 variant="ghost"
                                                 className="w-full justify-start h-11 text-sm text-destructive hover:text-destructive hover:bg-destructive/10"
@@ -345,13 +336,6 @@ export default function AdminNav() {
                                                         {user?.email ?? ""}
                                                     </div>
                                                 </div>
-                                            </div>
-
-                                            <div className="flex items-center justify-between px-2 py-2">
-                                                <span className="text-sm text-muted-foreground">
-                                                    Theme
-                                                </span>
-                                                <ThemeToggle />
                                             </div>
 
                                             <Button

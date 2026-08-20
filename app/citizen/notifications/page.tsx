@@ -157,9 +157,9 @@ export default function NotificationsPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50/30">
+        <div className="min-h-screen bg-background">
             {/* Header */}
-            <div className="bg-white/95 backdrop-blur-sm shadow-lg border-0">
+            <div className="bg-card/95 backdrop-blur-sm shadow-lg border-0">
                 <div className="container mx-auto px-4 py-4">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-4">
@@ -167,7 +167,7 @@ export default function NotificationsPage() {
                                 variant="ghost"
                                 size="sm"
                                 asChild
-                                className="hover:bg-[#2E6A56]/10"
+                                className="hover:bg-primary/10"
                             >
                                 <Link href="/citizen/dashboard">
                                     <ArrowLeft className="w-4 h-4 mr-2" />
@@ -175,10 +175,10 @@ export default function NotificationsPage() {
                                 </Link>
                             </Button>
                             <div>
-                                <h1 className="text-2xl font-bold text-gray-900">
+                                <h1 className="text-2xl font-bold text-foreground font-space-grotesk">
                                     Notifications
                                 </h1>
-                                <p className="text-gray-600">
+                                <p className="text-muted-foreground">
                                     Stay updated on your issues and community
                                     activity
                                 </p>
@@ -225,7 +225,7 @@ export default function NotificationsPage() {
                                 {unreadNotifications.map((notification) => (
                                     <Card
                                         key={notification.id}
-                                        className="shadow-md border-0 bg-gradient-to-r from-white to-emerald-50/20"
+                                        className="shadow-md border-0 bg-primary/5"
                                     >
                                         <CardContent className="p-4">
                                             <div className="flex gap-4">

@@ -20,7 +20,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "Janmarg - Civic Issue Reporting & Community Impact",
+  title: "Beacon - Civic Issue Reporting & Community Impact",
   description:
     "Report civic issues, track progress, and make a real difference in your community. Powered by AI and transparent governance.",
   generator: "v0.app",
@@ -36,7 +36,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${spaceGrotesk.variable} ${inter.variable} overflow-x-hidden font-inter`}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+        {/* Forced light site-wide for now: only the landing and auth pages
+            were actually built with a working dark mode. Citizen/admin
+            dashboards still have hardcoded light-only backgrounds from
+            before this redesign, so toggling dark on them produces broken,
+            low-contrast pages. Re-enable the toggle once those pages get
+            their own dark-mode-aware pass. forcedTheme also immediately
+            resets anyone already stuck on a stored dark preference. */}
+        <ThemeProvider attribute="class" defaultTheme="light" forcedTheme="light" enableSystem={false}>
           <AuthProvider>
             {children}
             <ToastProvider>

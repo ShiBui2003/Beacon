@@ -436,26 +436,26 @@ export default function CitizenDashboard() {
     }, [issues, selectedIssue]);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50/30 relative">
+        <div className="min-h-screen bg-background relative">
             {/* Decorative Background Elements */}
             <div className="fixed inset-0 pointer-events-none overflow-hidden">
-                <div className="absolute top-20 right-20 w-64 h-64 bg-gradient-to-br from-[#2E6A56]/5 to-emerald-400/5 rounded-full blur-3xl"></div>
-                <div className="absolute bottom-40 left-20 w-80 h-80 bg-gradient-to-br from-green-300/5 to-teal-400/5 rounded-full blur-3xl"></div>
+                <div className="absolute top-20 right-20 w-64 h-64 bg-gradient-to-br from-primary/5 to-accent/5 rounded-full blur-3xl"></div>
+                <div className="absolute bottom-40 left-20 w-80 h-80 bg-gradient-to-br from-accent/5 to-primary/5 rounded-full blur-3xl"></div>
             </div>
 
             {/* Header */}
-            <div className="bg-white/95 backdrop-blur-md shadow-lg relative z-10">
+            <div className="bg-card/95 backdrop-blur-md shadow-lg relative z-10">
                 <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div className="flex items-center space-x-3 sm:space-x-4 min-w-0 flex-1">
-                            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-[#2E6A56] to-emerald-600 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
-                                <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
+                                <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-primary-foreground" />
                             </div>
                             <div className="min-w-0 flex-1">
-                                <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">
+                                <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-foreground font-space-grotesk">
                                     Civic Issues Dashboard
                                 </h1>
-                                <p className="text-xs sm:text-sm lg:text-base text-gray-600">
+                                <p className="text-xs sm:text-sm lg:text-base text-muted-foreground">
                                     Track and report community issues
                                 </p>
                             </div>
@@ -463,7 +463,7 @@ export default function CitizenDashboard() {
                         <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                             <Button
                                 asChild
-                                className="w-full sm:w-auto h-10 sm:h-11 bg-gradient-to-r from-[#2E6A56] to-emerald-600 hover:from-[#1f4a3a] hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                                className="w-full sm:w-auto h-10 sm:h-11 bg-accent hover:brightness-90 text-accent-foreground shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                             >
                                 <Link href="/citizen/report">
                                     <Plus className="w-4 h-4 mr-2" />
@@ -475,7 +475,7 @@ export default function CitizenDashboard() {
                             <Button
                                 variant="outline"
                                 asChild
-                                className="w-full sm:w-auto h-10 sm:h-11 bg-white shadow-sm text-[#2E6A56] hover:bg-[#2E6A56]/5 hover:shadow-md"
+                                className="w-full sm:w-auto h-10 sm:h-11 bg-card shadow-sm text-primary hover:bg-primary/5 hover:shadow-md"
                             >
                                 <Link href="/citizen/issues/map">
                                     <MapIcon className="w-4 h-4 mr-2" />
@@ -497,19 +497,19 @@ export default function CitizenDashboard() {
             <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6 relative z-10">
                 {/* Stats Cards */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-4 mb-4 sm:mb-6">
-                    <Card className="bg-gradient-to-br from-white to-gray-50/50 shadow-lg hover:shadow-xl transition-all duration-300 border-0 hover:scale-105 transform">
+                    <Card className="bg-card shadow-lg hover:shadow-xl transition-all duration-300 border-0 hover:scale-105 transform">
                         <CardContent className="p-3 sm:p-4">
                             <div className="flex items-center justify-between">
                                 <div className="min-w-0 flex-1">
-                                    <p className="text-xs sm:text-sm text-gray-600 truncate font-medium">
+                                    <p className="text-xs sm:text-sm text-muted-foreground truncate font-medium">
                                         Total Issues
                                     </p>
-                                    <p className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">
+                                    <p className="text-lg sm:text-xl lg:text-2xl font-bold text-foreground">
                                         {stats.total}
                                     </p>
                                 </div>
-                                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center">
-                                    <AlertTriangle className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" />
+                                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-muted rounded-xl flex items-center justify-center">
+                                    <AlertTriangle className="w-5 h-5 sm:w-6 sm:h-6 text-muted-foreground" />
                                 </div>
                             </div>
                         </CardContent>
@@ -533,37 +533,37 @@ export default function CitizenDashboard() {
                         </CardContent>
                     </Card>
 
-                    <Card className="bg-gradient-to-br from-emerald-50 to-green-100/50 shadow-lg hover:shadow-xl transition-all duration-300 border-0 hover:scale-105 transform">
+                    <Card className="bg-success/10 shadow-lg hover:shadow-xl transition-all duration-300 border-0 hover:scale-105 transform">
                         <CardContent className="p-3 sm:p-4">
                             <div className="flex items-center justify-between">
                                 <div className="min-w-0 flex-1">
-                                    <p className="text-xs sm:text-sm text-emerald-700 truncate font-medium">
+                                    <p className="text-xs sm:text-sm text-success truncate font-medium">
                                         Resolved
                                     </p>
-                                    <p className="text-lg sm:text-xl lg:text-2xl font-bold text-emerald-600">
+                                    <p className="text-lg sm:text-xl lg:text-2xl font-bold text-success">
                                         {stats.resolved}
                                     </p>
                                 </div>
-                                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-emerald-200 to-green-300 rounded-xl flex items-center justify-center">
-                                    <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-700" />
+                                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-success/20 rounded-xl flex items-center justify-center">
+                                    <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-success" />
                                 </div>
                             </div>
                         </CardContent>
                     </Card>
 
-                    <Card className="bg-gradient-to-br from-[#2E6A56]/10 to-emerald-100/50 shadow-lg hover:shadow-xl transition-all duration-300 border-0 hover:scale-105 transform">
+                    <Card className="bg-primary/10 shadow-lg hover:shadow-xl transition-all duration-300 border-0 hover:scale-105 transform">
                         <CardContent className="p-3 sm:p-4">
                             <div className="flex items-center justify-between">
                                 <div className="min-w-0 flex-1">
-                                    <p className="text-xs sm:text-sm text-[#2E6A56] truncate font-medium">
+                                    <p className="text-xs sm:text-sm text-primary truncate font-medium">
                                         This Month
                                     </p>
-                                    <p className="text-lg sm:text-xl lg:text-2xl font-bold text-[#2E6A56]">
+                                    <p className="text-lg sm:text-xl lg:text-2xl font-bold text-primary">
                                         {stats.createdThisMonth}
                                     </p>
                                 </div>
-                                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-[#2E6A56]/20 to-emerald-200 rounded-xl flex items-center justify-center">
-                                    <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-[#2E6A56]" />
+                                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/20 rounded-xl flex items-center justify-center">
+                                    <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                                 </div>
                             </div>
                         </CardContent>
@@ -571,19 +571,19 @@ export default function CitizenDashboard() {
                 </div>
 
                 {/* Filters and Search */}
-                <Card className="mb-4 sm:mb-6 bg-white/95 backdrop-blur-sm shadow-lg border-0">
+                <Card className="mb-4 sm:mb-6 bg-card/95 backdrop-blur-sm shadow-lg border-0">
                     <CardContent className="p-3 sm:p-4">
                         <div className="space-y-3 sm:space-y-4">
                             {/* Search - Full width on mobile */}
                             <div className="relative">
-                                <Search className="absolute left-3 top-3 h-4 w-4 text-[#2E6A56]" />
+                                <Search className="absolute left-3 top-3 h-4 w-4 text-primary" />
                                 <Input
                                     placeholder="Search issues or locations..."
                                     value={searchTerm}
                                     onChange={(e) =>
                                         setSearchTerm(e.target.value)
                                     }
-                                    className="pl-10 h-11 sm:h-10 text-sm bg-gradient-to-r from-gray-50 to-emerald-50/30 shadow-sm focus:shadow-md text-gray-900"
+                                    className="pl-10 h-11 sm:h-10 text-sm bg-muted shadow-sm focus:shadow-md text-foreground"
                                 />
                             </div>
 
@@ -658,7 +658,7 @@ export default function CitizenDashboard() {
 
                                 {/* View toggle - Right aligned on desktop, full width on mobile */}
                                 <div className="flex sm:ml-auto">
-                                    <div className="flex items-center space-x-1 bg-gradient-to-r from-gray-100 to-emerald-50/50 p-1 rounded-lg w-full sm:w-auto shadow-sm">
+                                    <div className="flex items-center space-x-1 bg-muted p-1 rounded-lg w-full sm:w-auto shadow-sm">
                                         <Button
                                             variant={
                                                 viewMode === "list"
@@ -669,8 +669,8 @@ export default function CitizenDashboard() {
                                             onClick={() => setViewMode("list")}
                                             className={`h-9 px-3 flex-1 sm:flex-none ${
                                                 viewMode === "list"
-                                                    ? "bg-gradient-to-r from-[#2E6A56] to-emerald-600 text-white shadow-md"
-                                                    : "text-gray-600 hover:text-[#2E6A56]"
+                                                    ? "bg-primary text-primary-foreground shadow-md"
+                                                    : "text-muted-foreground hover:text-primary"
                                             }`}
                                         >
                                             <List className="w-4 h-4 mr-1 sm:mr-0" />
