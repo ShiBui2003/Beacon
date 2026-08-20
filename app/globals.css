@@ -17,15 +17,16 @@
     --secondary-foreground: 0 0% 100%;
 
     --muted: 252 45% 96%; /* #F1EFF9 */
-    --muted-foreground: 253 12% 45%; /* #6B6580 */
+    --muted-foreground: 247 11% 47%; /* #6E6B85 — body copy */
+    --caption-foreground: 248 11% 58%; /* #8B88A0 — captions/meta text */
 
     --card: 0 0% 100%;
     --card-foreground: 245 47% 25%;
     --popover: 0 0% 100%;
     --popover-foreground: 245 47% 25%;
 
-    --border: 252 33% 91%; /* #E4E1F0 */
-    --input: 252 33% 91%;
+    --border: 249 28% 91%; /* #E3E1EE */
+    --input: 249 28% 91%;
     --ring: 245 60% 67%; /* #7F77DD */
 
     --accent: 15 68% 52%; /* #D85A30 — coral, urgency/CTA only */
@@ -78,6 +79,7 @@
 
     --muted: 245 43% 30%; /* #322C6E */
     --muted-foreground: 248 37% 77%; /* #B3ADD9 */
+    --caption-foreground: 246 20% 55%;
 
     --card: 246 45% 37%;
     --card-foreground: 258 41% 97%;
@@ -119,6 +121,7 @@
     --color-secondary-foreground: hsl(var(--secondary-foreground));
     --color-muted: hsl(var(--muted));
     --color-muted-foreground: hsl(var(--muted-foreground));
+    --color-caption-foreground: hsl(var(--caption-foreground));
     --color-accent: hsl(var(--accent));
     --color-accent-foreground: hsl(var(--accent-foreground));
     --color-accent-tint: hsl(var(--accent-tint));

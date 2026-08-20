@@ -1,35 +1,72 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
+import Link from "next/link"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
-import {
-    MapPin,
-    Shield,
-    Zap,
-    Users,
-    TrendingUp,
-    Check,
-    Download,
-    LogIn,
-    Globe,
-    Lock,
-    ArrowRight,
-    Star,
-    Bell,
-    BarChart3,
-    Smartphone,
-} from "lucide-react";
-import Link from "next/link";
+import { useGSAP } from "@gsap/react"
+
+interface Phase {
+    label: string
+    detail: string
+    railClass: string
+    badgeClass: string
+}
+
+const PHASES: Phase[] = [
+    {
+        label: "SUBMITTED",
+        detail: "Filed 0:02 ago via photo upload",
+        railClass: "border-l-[#C9C6DA]",
+        badgeClass: "bg-white text-caption-foreground border border-[#C9C6DA]",
+    },
+    {
+        label: "AI SCORING",
+        detail: "Gemini + BART scoring urgency now",
+        railClass: "border-l-accent",
+        badgeClass: "bg-accent text-white border-transparent",
+    },
+    {
+        label: "ROUTED · HIGH",
+        detail: "Sent to Public Safety, confidence 0.94",
+        railClass: "border-l-primary",
+        badgeClass: "bg-primary text-white border-transparent",
+    },
+    {
+        label: "RESOLVED",
+        detail: "Closed by field crew, 3h 40m total",
+        railClass: "border-l-[#26215C]",
+        badgeClass: "bg-[#26215C] text-white border-transparent",
+    },
+]
+
+const FOCUS_RING =
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
 
 export default function HomePage() {
-    gsap.registerPlugin(ScrollTrigger)
+    const [phaseIndex, setPhaseIndex] = useState(0)
+    const heroLeftRef = useRef<HTMLDivElement>(null)
+    const howLineRef = useRef<HTMLDivElement>(null)
+    const howStepsRef = useRef<HTMLDivElement>(null)
+    const aiShowcaseRef = useRef<HTMLDivElement>(null)
 
-    const heroRef = useRef<HTMLDivElement>(null)
-    const statsRef = useRef<HTMLDivElement>(null)
-    const featuresRef = useRef<HTMLDivElement>(null)
-
+    // Signature element: cycles through the report lifecycle every 2.4s.
+    // Skipped entirely under prefers-reduced-motion, resting on "Resolved".
     useEffect(() => {
+        const reduced = window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+        ).matches
+        if (reduced) {
+            setPhaseIndex(PHASES.length - 1)
+            return
+        }
+        const interval = setInterval(() => {
+            setPhaseIndex((i) => (i + 1) % PHASES.length)
+        }, 2400)
+        return () => clearInterval(interval)
+    }, [])
+
+    useGSAP(() => {
         const mm = gsap.matchMedia()
 
         mm.add(
@@ -41,51 +78,82 @@ export default function HomePage() {
                 const { reduceMotion } = context.conditions as {
                     reduceMotion: boolean
                 }
+                if (reduceMotion) return
 
-                if (reduceMotion) {
-                    // Reduced motion: content is already visible in the DOM
-                    // (no opacity-0 initial state is set below), so there is
-                    // nothing further to do here.
-                    return
-                }
+                gsap.registerPlugin(ScrollTrigger)
 
-                if (heroRef.current) {
-                    gsap.from(heroRef.current.children, {
-                        opacity: 0,
-                        y: 24,
-                        duration: 0.7,
-                        stagger: 0.12,
-                        ease: "power2.out",
-                    })
-                }
-
-                if (statsRef.current) {
-                    gsap.from(statsRef.current.querySelectorAll(".stat-item"), {
-                        opacity: 0,
-                        y: 16,
-                        duration: 0.5,
-                        stagger: 0.1,
-                        scrollTrigger: {
-                            trigger: statsRef.current,
-                            start: "top 85%",
-                        },
-                    })
-                }
-
-                if (featuresRef.current) {
-                    gsap.from(
-                        featuresRef.current.querySelectorAll(".feature-item"),
+                if (heroLeftRef.current) {
+                    gsap.fromTo(
+                        heroLeftRef.current,
+                        { opacity: 0, y: 20 },
                         {
-                            opacity: 0,
-                            y: 24,
-                            duration: 0.6,
-                            stagger: 0.1,
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.7,
+                            ease: "power2.out",
+                            immediateRender: false,
+                        }
+                    )
+                }
+
+                if (howLineRef.current) {
+                    gsap.fromTo(
+                        howLineRef.current,
+                        { scaleX: 0, transformOrigin: "left" },
+                        {
+                            scaleX: 1,
+                            duration: 0.9,
+                            ease: "power2.inOut",
+                            immediateRender: false,
                             scrollTrigger: {
-                                trigger: featuresRef.current,
-                                start: "top 80%",
+                                trigger: howLineRef.current,
+                                start: "top 82%",
                             },
                         }
                     )
+                }
+
+                if (howStepsRef.current) {
+                    const steps =
+                        howStepsRef.current.querySelectorAll(".how-step")
+                    steps.forEach((el, i) => {
+                        gsap.fromTo(
+                            el,
+                            { opacity: 0, y: 18 },
+                            {
+                                opacity: 1,
+                                y: 0,
+                                duration: 0.5,
+                                delay: i * 0.12,
+                                ease: "power2.out",
+                                immediateRender: false,
+                                scrollTrigger: { trigger: el, start: "top 85%" },
+                            }
+                        )
+                    })
+                }
+
+                if (aiShowcaseRef.current) {
+                    const fields =
+                        aiShowcaseRef.current.querySelectorAll(".ai-field")
+                    fields.forEach((el, i) => {
+                        gsap.fromTo(
+                            el,
+                            { opacity: 0, x: -12 },
+                            {
+                                opacity: 1,
+                                x: 0,
+                                duration: 0.45,
+                                delay: i * 0.15,
+                                ease: "power2.out",
+                                immediateRender: false,
+                                scrollTrigger: {
+                                    trigger: aiShowcaseRef.current,
+                                    start: "top 78%",
+                                },
+                            }
+                        )
+                    })
                 }
             }
         )
@@ -93,427 +161,399 @@ export default function HomePage() {
         return () => mm.revert()
     }, [])
 
-    const features = [
-        {
-            icon: MapPin,
-            title: "Real-time Reporting",
-            description:
-                "Report civic issues instantly with location-based mapping and photo documentation.",
-        },
-        {
-            icon: Bell,
-            title: "Smart Notifications",
-            description:
-                "Get instant updates on report status, government responses, and community activities.",
-        },
-        {
-            icon: BarChart3,
-            title: "Analytics Dashboard",
-            description:
-                "Comprehensive insights and data visualization for administrators and citizens.",
-        },
-        {
-            icon: Users,
-            title: "Community Engagement",
-            description:
-                "Connect with local communities and participate in democratic decision-making.",
-        },
-        {
-            icon: Shield,
-            title: "Secure & Verified",
-            description:
-                "Government-grade security with verified user authentication and data protection.",
-        },
-        {
-            icon: Zap,
-            title: "Fast Response",
-            description:
-                "Quick resolution tracking with automated workflow and priority management.",
-        },
-    ];
-
-    const stats = [
-        { number: "50K+", label: "Active Citizens" },
-        { number: "15K+", label: "Issues Resolved" },
-        { number: "98%", label: "User Satisfaction" },
-        { number: "24/7", label: "Support Available" },
-    ];
+    const phase = PHASES[phaseIndex]
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50 relative overflow-hidden">
-            {/* Animated Background Blobs */}
-            <div className="fixed inset-0 pointer-events-none">
-                <div className="absolute top-10 left-10 w-72 h-72 bg-gradient-to-br from-primary/8 to-accent/8 rounded-full blur-3xl animate-pulse"></div>
-                <div
-                    className="absolute top-1/3 right-10 w-96 h-96 bg-gradient-to-br from-primary/6 to-accent/6 rounded-full blur-3xl animate-pulse"
-                    style={{ animationDelay: "2s" }}
-                ></div>
-                <div
-                    className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-gradient-to-br from-primary/8 to-accent/8 rounded-full blur-3xl animate-pulse"
-                    style={{ animationDelay: "1s" }}
-                ></div>
-                <div
-                    className="absolute bottom-10 right-1/3 w-64 h-64 bg-gradient-to-br from-primary/6 to-accent/6 rounded-full blur-3xl animate-pulse"
-                    style={{ animationDelay: "3s" }}
-                ></div>
-            </div>
-
-            {/* Navigation */}
-            <nav className="bg-white/95 backdrop-blur-md border-b shadow-sm border-gray-200 sticky top-0 z-50">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-16">
-                        <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
-                                <MapPin className="w-6 h-6 text-white" />
-                            </div>
-                            <span className="text-2xl font-bold text-primary">
-                                JANMARG
-                            </span>
-                        </div>
-
-                        <div className="flex items-center space-x-6">
-                            <Link
-                                href="/auth?mode=login"
-                                className="text-primary hover:text-[var(--primary-hover)] font-medium flex items-center gap-2"
-                            >
-                                <LogIn className="w-4 h-4" />
-                                Sign In
-                            </Link>
-                        </div>
+        <div className="min-h-screen bg-background text-foreground">
+            {/* Nav */}
+            <nav className="sticky top-0 z-20 flex items-center justify-between h-[76px] px-6 md:px-12 bg-background border-b border-border">
+                <div className="flex items-center gap-2.5">
+                    <div className="relative w-[30px] h-[30px] bg-foreground">
+                        <div className="absolute left-1/2 top-1/2 w-2.5 h-2.5 bg-accent -translate-x-1/2 -translate-y-1/2" />
                     </div>
+                    <span className="font-space-grotesk font-bold text-xl tracking-wide text-foreground">
+                        BEACON
+                    </span>
                 </div>
+                <div className="hidden md:flex items-center gap-7">
+                    <a
+                        href="#how"
+                        className={`text-secondary hover:text-foreground text-[15px] font-medium ${FOCUS_RING}`}
+                    >
+                        How it works
+                    </a>
+                    <a
+                        href="#ai-layer"
+                        className={`text-secondary hover:text-foreground text-[15px] font-medium ${FOCUS_RING}`}
+                    >
+                        The AI layer
+                    </a>
+                    <a
+                        href="#staff"
+                        className={`text-secondary hover:text-foreground text-[15px] font-medium ${FOCUS_RING}`}
+                    >
+                        For departments
+                    </a>
+                    <Link
+                        href="/auth?mode=login"
+                        className={`text-foreground font-medium text-[15px] ${FOCUS_RING}`}
+                    >
+                        Sign in
+                    </Link>
+                    <Link
+                        href="/citizen/report"
+                        className={`font-space-grotesk font-semibold text-[15px] px-[22px] py-[11px] bg-accent text-white hover:brightness-90 transition-[filter] ${FOCUS_RING}`}
+                    >
+                        Report an issue
+                    </Link>
+                </div>
+                <Link
+                    href="/citizen/report"
+                    className={`md:hidden font-space-grotesk font-semibold text-sm px-4 py-2.5 bg-accent text-white hover:brightness-90 transition-[filter] ${FOCUS_RING}`}
+                >
+                    Report
+                </Link>
             </nav>
 
-            {/* Hero Section */}
-            <section className="relative py-20 lg:py-32 overflow-hidden">
-                {/* Decorative Leaf Elements */}
-                <div className="absolute inset-0 pointer-events-none">
-                    <div
-                        className="absolute top-20 left-1/4 w-8 h-8 text-primary/60 animate-bounce"
-                        style={{
-                            animationDelay: "0.5s",
-                            animationDuration: "4s",
-                        }}
-                    >
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                            className="w-full h-full"
-                        >
-                            <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" />
-                        </svg>
+            {/* Hero */}
+            <section className="max-w-[1220px] mx-auto px-6 md:px-12 pt-16 md:pt-[88px] pb-16 grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-14 items-center">
+                <div ref={heroLeftRef} className="opacity-100">
+                    <div className="inline-flex items-center gap-2 px-3.5 py-[7px] border border-ring text-[13px] font-semibold text-secondary font-space-grotesk mb-6">
+                        Built for municipal &amp; campus infrastructure
                     </div>
-
-                    <div
-                        className="absolute top-1/3 right-1/4 w-6 h-6 text-accent/70 animate-pulse"
-                        style={{
-                            animationDelay: "1s",
-                            animationDuration: "3s",
-                        }}
-                    >
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                            className="w-full h-full rotate-45"
+                    <h1 className="font-space-grotesk font-bold text-4xl md:text-5xl leading-[1.1] mb-5 text-foreground">
+                        A cracked sidewalk and a live wire don&apos;t belong in
+                        the same queue.
+                    </h1>
+                    <p className="text-[17px] leading-[1.65] text-muted-foreground max-w-[500px] mb-8">
+                        Beacon reads every report — photo, voice, or text —
+                        the second it&apos;s filed, scores how dangerous it
+                        actually is, and routes it to the department that
+                        owns it. Triage stops depending on who shouts
+                        loudest.
+                    </p>
+                    <div className="flex gap-4 flex-wrap">
+                        <Link
+                            href="/citizen/report"
+                            className={`font-space-grotesk font-semibold text-base px-7 py-[15px] bg-accent text-white hover:brightness-90 transition-[filter] ${FOCUS_RING}`}
                         >
-                            <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z" />
-                        </svg>
-                    </div>
-
-                    <div
-                        className="absolute top-1/2 left-16 w-7 h-7 text-secondary/50 animate-pulse"
-                        style={{
-                            animationDelay: "3s",
-                            animationDuration: "3.5s",
-                        }}
-                    >
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                            className="w-full h-full rotate-12"
+                            Report an issue
+                        </Link>
+                        <Link
+                            href="/auth?mode=login"
+                            className={`font-space-grotesk font-semibold text-base px-7 py-[15px] border-[1.5px] border-foreground text-foreground hover:bg-foreground hover:text-white transition-colors ${FOCUS_RING}`}
                         >
-                            <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" />
-                        </svg>
+                            Sign in
+                        </Link>
                     </div>
                 </div>
 
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div ref={heroRef} className="text-center space-y-8 max-w-4xl mx-auto">
-                        <div className="inline-flex items-center bg-primary/10 text-primary hover:bg-primary/15 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 hover:scale-105">
-                            <Globe className="w-4 h-4 mr-2" />
-                            Digital Governance Platform
-                        </div>
-
-                        <h1 className="text-4xl lg:text-7xl font-bold text-gray-900 leading-tight">
-                            Connect with your city.
-                            <span className="text-primary block mt-2">
-                                Make it better.
-                            </span>
-                        </h1>
-
-                        <p className="text-xl lg:text-2xl text-gray-700 leading-relaxed max-w-3xl mx-auto">
-                            Report issues, track updates, and participate in
-                            building stronger communities through digital
-                            governance.
-                        </p>
-
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                            <Link
-                                href="/auth?mode=signup"
-                                className="bg-accent hover:brightness-90 text-white px-10 py-4 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 group flex items-center"
-                            >
-                                <Download className="w-5 h-5 mr-3" />
-                                Get Started Free
-                                <ArrowRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform" />
-                            </Link>
-
-                            <Link
-                                href="/auth?mode=login"
-                                className="text-primary hover:text-[var(--primary-hover)] font-medium text-lg flex items-center group transition-all duration-300"
-                            >
-                                <Shield className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
-                                Sign In
-                            </Link>
-                        </div>
+                {/* Signature element: live report lifecycle */}
+                <div className="border border-border bg-card p-7">
+                    <div className="flex items-center justify-between mb-5">
+                        <span className="font-space-grotesk text-xs font-bold text-caption-foreground uppercase tracking-wider">
+                            One report, followed live
+                        </span>
+                        <span className="text-[11px] text-caption-foreground">
+                            #BC-4471
+                        </span>
                     </div>
-                </div>
-            </section>
 
-            {/* Stats Section */}
-            <section className="py-16 bg-white/70 backdrop-blur-sm border-y border-gray-100">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div ref={statsRef} className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-                        {stats.map((stat, index) => (
+                    <div
+                        className={`border border-border border-l-4 ${phase.railClass} px-[18px] pt-[18px] pb-5 mb-5 transition-colors duration-500`}
+                    >
+                        <div className="font-semibold text-[15px] text-foreground mb-1">
+                            Downed power line, Elm &amp; 4th
+                        </div>
+                        <div className="text-xs text-caption-foreground mb-3.5">
+                            {phase.detail}
+                        </div>
+                        <span
+                            className={`font-space-grotesk text-[11px] font-bold px-2.5 py-[5px] tracking-wide transition-colors duration-300 ${phase.badgeClass}`}
+                        >
+                            {phase.label}
+                        </span>
+                    </div>
+
+                    <div className="flex items-center gap-1.5">
+                        {PHASES.map((p, i) => (
                             <div
-                                key={index}
-                                className="stat-item text-center group hover:scale-105 transition-transform duration-300"
-                            >
-                                <div className="text-3xl lg:text-4xl font-bold text-primary mb-2">
-                                    {stat.number}
-                                </div>
-                                <div className="text-sm lg:text-base text-gray-700 font-medium">
-                                    {stat.label}
-                                </div>
-                            </div>
+                                key={p.label}
+                                className={`flex-1 h-1 transition-colors duration-300 ${
+                                    i <= phaseIndex
+                                        ? phase.railClass.replace(
+                                              "border-l-",
+                                              "bg-"
+                                          )
+                                        : "bg-border"
+                                }`}
+                            />
                         ))}
                     </div>
-                </div>
-            </section>
-
-            {/* App Preview Section */}
-            <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center space-y-8">
-                        <div className="space-y-4">
-                            <div className="inline-flex items-center bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">
-                                <Smartphone className="w-4 h-4 mr-2" />
-                                Mobile App
-                            </div>
-                            <h2 className="text-3xl lg:text-5xl font-bold text-gray-900">
-                                Everything you need
-                                <span className="text-primary block">
-                                    in your pocket
-                                </span>
-                            </h2>
-                        </div>
-
-                        <div className="max-w-md mx-auto">
-                            <div className="bg-white/95 backdrop-blur-sm shadow-xl border-0 hover:shadow-2xl transition-all duration-500 hover:scale-105 rounded-lg">
-                                <div className="text-center pb-4 pt-6 px-6">
-                                    <div className="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                                        <Smartphone className="w-8 h-8 text-white" />
-                                    </div>
-                                    <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                                        Janmarg Mobile App
-                                    </h3>
-                                    <div className="flex items-center justify-center space-x-1 mt-2">
-                                        {[...Array(5)].map((_, i) => (
-                                            <Star
-                                                key={i}
-                                                className="w-4 h-4 fill-yellow-400 text-yellow-400"
-                                            />
-                                        ))}
-                                        <span className="ml-2 text-sm font-medium text-gray-600">
-                                            4.8 (12K+ reviews)
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className="space-y-3 p-6">
-                                    <div className="flex items-center space-x-3 p-3 bg-emerald-50 rounded-lg hover:bg-emerald-100 transition-colors">
-                                        <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center">
-                                            <MapPin className="w-4 h-4 text-emerald-600" />
-                                        </div>
-                                        <span className="text-sm font-medium text-emerald-800">
-                                            Report civic issues instantly
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
-                                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                            <Bell className="w-4 h-4 text-blue-600" />
-                                        </div>
-                                        <span className="text-sm font-medium text-blue-800">
-                                            Track resolution progress
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center space-x-3 p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">
-                                        <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                                            <Users className="w-4 h-4 text-purple-600" />
-                                        </div>
-                                        <span className="text-sm font-medium text-purple-800">
-                                            Community engagement
-                                        </span>
-                                    </div>
-                                    <div className="pt-4">
-                                        <Link
-                                            href="/auth?mode=signup"
-                                            className="w-full bg-primary hover:bg-[var(--primary-hover)] text-white py-3 rounded-lg group transition-all duration-300 flex items-center justify-center"
-                                        >
-                                            <Download className="w-4 h-4 mr-2" />
-                                            Get Started Now
-                                            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                                        </Link>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div className="flex justify-between mt-2">
+                        <span className="text-[10px] text-caption-foreground font-space-grotesk">
+                            SUBMITTED
+                        </span>
+                        <span className="text-[10px] text-caption-foreground font-space-grotesk">
+                            AI SCORING
+                        </span>
+                        <span className="text-[10px] text-caption-foreground font-space-grotesk">
+                            ROUTED
+                        </span>
+                        <span className="text-[10px] text-caption-foreground font-space-grotesk">
+                            RESOLVED
+                        </span>
                     </div>
                 </div>
             </section>
 
-            {/* Features Section */}
-            <section className="py-20 bg-white">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center space-y-6 mb-16">
-                        <div className="inline-flex items-center bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">
-                            Platform Features
-                        </div>
-                        <h2 className="text-3xl lg:text-5xl font-bold text-gray-900 leading-tight">
-                            Built for citizens,
-                            <span className="text-primary block">
-                                powered by innovation
-                            </span>
-                        </h2>
-                        <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
-                            Modern tools that make civic engagement simple,
-                            transparent, and effective for everyone.
-                        </p>
-                    </div>
-
-                    <div ref={featuresRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {features.map((feature, index) => (
-                            <div
-                                key={index}
-                                className="feature-item bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:border-primary/20 transition-all duration-300 hover:scale-105 group rounded-lg p-6"
-                            >
-                                <div className="pb-4">
-                                    <div className="w-14 h-14 bg-gradient-to-br from-primary/10 to-primary/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                                        <feature.icon className="w-7 h-7 text-primary" />
-                                    </div>
-                                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors mb-3">
-                                        {feature.title}
-                                    </h3>
-                                </div>
-                                <p className="text-gray-700 leading-relaxed">
-                                    {feature.description}
-                                </p>
-                            </div>
-                        ))}
-                    </div>
+            {/* How it works */}
+            <section
+                id="how"
+                className="max-w-[1220px] mx-auto px-6 md:px-12 py-14"
+            >
+                <div className="flex items-baseline justify-between mb-11 border-b border-border pb-4.5">
+                    <h2 className="font-space-grotesk font-bold text-[30px] text-foreground">
+                        How a report flows
+                    </h2>
+                    <span className="text-[13px] text-caption-foreground hidden sm:inline">
+                        Photo, voice, or text → routed department
+                    </span>
                 </div>
-            </section>
-
-            {/* CTA Section */}
-            <section className="py-20 bg-gradient-to-br from-primary to-secondary relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/95 to-secondary/95"></div>
-                <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <div className="space-y-8">
-                        <h2 className="text-3xl lg:text-5xl font-bold text-white leading-tight">
-                            Ready to make a difference?
-                        </h2>
-                        <p className="text-xl lg:text-2xl text-emerald-50 leading-relaxed">
-                            Join thousands building stronger communities through
-                            digital governance.
-                        </p>
-                        <div className="pt-4">
-                            <Link
-                                href="/auth?mode=signup"
-                                className="inline-block bg-white text-primary hover:bg-gray-100 px-10 py-4 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group transform hover:scale-105"
-                            >
-                                <Download className="w-5 h-5 mr-3 inline" />
-                                Get Started Free
-                                <ArrowRight className="w-5 h-5 ml-3 inline group-hover:translate-x-1 transition-transform" />
-                            </Link>
-                        </div>
-                        <div className="pt-4">
-                            <Link
-                                href="/auth?mode=login"
-                                className="text-emerald-100 hover:text-white font-medium text-lg flex items-center justify-center mx-auto group transition-all duration-300"
-                            >
-                                <Lock className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
-                                Already have an account? Sign in
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Footer */}
-            <footer className="bg-gray-900 text-white py-12">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="grid md:grid-cols-3 gap-8">
-                        <div className="space-y-4">
-                            <div className="flex items-center space-x-3">
-                                <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-                                    <MapPin className="w-5 h-5 text-white" />
-                                </div>
-                                <span className="text-xl font-bold">
-                                    JANMARG
-                                </span>
-                            </div>
-                            <p className="text-gray-400">
-                                Empowering digital democracy through
-                                transparent, efficient, and responsive
-                                governance.
+                <div className="relative">
+                    <div
+                        ref={howLineRef}
+                        className="absolute top-2 left-0 right-0 h-px bg-border hidden md:block"
+                    />
+                    <div
+                        ref={howStepsRef}
+                        className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-0 relative"
+                    >
+                        <div className="how-step md:pr-6">
+                            <div className="w-4 h-4 rounded-full bg-accent mb-4" />
+                            <h3 className="font-space-grotesk text-base font-semibold mb-2 text-foreground">
+                                Citizen files a report
+                            </h3>
+                            <p className="text-[13.5px] leading-[1.6] text-muted-foreground">
+                                Photo, voice, or typed text — in Hindi,
+                                Bengali, Tamil, Telugu, Marathi, Gujarati,
+                                Punjabi, Urdu, or English.
                             </p>
                         </div>
-
-                        <div className="space-y-4">
-                            <h3 className="text-lg font-semibold">
-                                Quick Links
+                        <div className="how-step md:px-6">
+                            <div className="w-4 h-4 rounded-full bg-accent mb-4" />
+                            <h3 className="font-space-grotesk text-base font-semibold mb-2 text-foreground">
+                                Gemini reads the photo
                             </h3>
-                            <div className="space-y-2">
-                                <Link
-                                    href="/auth?mode=signup"
-                                    className="block text-gray-400 hover:text-white transition-colors"
-                                >
-                                    Get Started
-                                </Link>
-                                <Link
-                                    href="/auth?mode=login"
-                                    className="block text-gray-400 hover:text-white transition-colors"
-                                >
-                                    Sign In
-                                </Link>
-                            </div>
+                            <p className="text-[13.5px] leading-[1.6] text-muted-foreground">
+                                Vision model extracts title, category, and an
+                                initial urgency guess — no hard cutoff blocks
+                                a submission.
+                            </p>
                         </div>
-
-                        <div className="space-y-4">
-                            <h3 className="text-lg font-semibold">Contact</h3>
-                            <div className="space-y-2 text-gray-400">
-                                <p>support@janmarg.gov.in</p>
-                                <p>+91 1800-XXX-XXXX</p>
-                            </div>
+                        <div className="how-step md:px-6">
+                            <div className="w-4 h-4 rounded-full bg-accent mb-4" />
+                            <h3 className="font-space-grotesk text-base font-semibold mb-2 text-foreground">
+                                BART re-scores async
+                            </h3>
+                            <p className="text-[13.5px] leading-[1.6] text-muted-foreground">
+                                Zero-shot classification against
+                                low/medium/high overwrites priority moments
+                                after the report is saved.
+                            </p>
                         </div>
-                    </div>
-
-                    <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                        <p>
-                            © 2025 Janmarg. All rights reserved. | A Digital
-                            India Initiative
-                        </p>
+                        <div className="how-step md:pl-6">
+                            <div className="w-4 h-4 rounded-full bg-accent mb-4" />
+                            <h3 className="font-space-grotesk text-base font-semibold mb-2 text-foreground">
+                                Routed to a department
+                            </h3>
+                            <p className="text-[13.5px] leading-[1.6] text-muted-foreground">
+                                Category maps to one of the department
+                                queues, scoped so no department sees
+                                another&apos;s backlog.
+                            </p>
+                        </div>
                     </div>
                 </div>
+            </section>
+
+            {/* AI layer */}
+            <section id="ai-layer" className="bg-[#26215C] py-16 md:py-[72px] px-6 md:px-12">
+                <div className="max-w-[1220px] mx-auto">
+                    <div className="flex items-baseline justify-between mb-11 flex-wrap gap-2">
+                        <h2 className="font-space-grotesk font-bold text-[30px] text-white">
+                            The AI layer, in one submission
+                        </h2>
+                        <span className="text-[13px] text-[#B5B0DD]">
+                            Two independent scoring passes, one report
+                        </span>
+                    </div>
+                    <div
+                        ref={aiShowcaseRef}
+                        className="grid grid-cols-1 md:grid-cols-[0.85fr_1.15fr] border border-secondary"
+                    >
+                        <div className="bg-[#312A70] p-8 flex flex-col justify-center gap-1.5">
+                            <div className="w-full h-40 bg-[#26215C] border border-secondary mb-4 flex items-center justify-center">
+                                <svg
+                                    width="34"
+                                    height="34"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="#7F77DD"
+                                    strokeWidth="1.6"
+                                >
+                                    <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
+                                    <circle cx="12" cy="13" r="3" />
+                                </svg>
+                            </div>
+                            <span className="text-xs text-[#B5B0DD]">
+                                Submitted photo
+                            </span>
+                        </div>
+                        <div className="bg-[#26215C] p-8 flex flex-col gap-px">
+                            <div className="ai-field flex justify-between py-3.5 px-1 border-b border-secondary">
+                                <span className="text-[13px] text-[#B5B0DD]">
+                                    Title (Gemini)
+                                </span>
+                                <span className="text-[13px] font-semibold text-white text-right">
+                                    Downed power line near school gate
+                                </span>
+                            </div>
+                            <div className="ai-field flex justify-between py-3.5 px-1 border-b border-secondary">
+                                <span className="text-[13px] text-[#B5B0DD]">
+                                    Category (Gemini)
+                                </span>
+                                <span className="text-[13px] font-semibold text-white">
+                                    Public Safety
+                                </span>
+                            </div>
+                            <div className="ai-field flex justify-between items-center py-3.5 px-1 border-b border-secondary">
+                                <span className="text-[13px] text-[#B5B0DD]">
+                                    Initial urgency (Gemini)
+                                </span>
+                                <span className="font-space-grotesk text-[11px] font-bold px-2.5 py-1 bg-accent text-white">
+                                    HIGH
+                                </span>
+                            </div>
+                            <div className="ai-field flex justify-between items-center py-3.5 px-1">
+                                <span className="text-[13px] text-[#B5B0DD]">
+                                    Re-scored (BART, async)
+                                </span>
+                                <span className="font-space-grotesk text-[11px] font-bold px-2.5 py-1 bg-accent text-white">
+                                    HIGH · 0.94 confidence
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <p className="text-[13px] text-[#8983BB] mt-5 max-w-[640px]">
+                        Gemini&apos;s guess seeds the priority at intake;
+                        BART&apos;s independent pass overwrites it moments
+                        later. The two are allowed to disagree — urgency
+                        gets checked twice, not assumed once.
+                    </p>
+                </div>
+            </section>
+
+            {/* For departments */}
+            <section
+                id="staff"
+                className="max-w-[1220px] mx-auto px-6 md:px-12 py-16 md:py-[72px]"
+            >
+                <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-10 lg:gap-14 items-center">
+                    <div>
+                        <div className="inline-flex items-center gap-2 px-3.5 py-[7px] border border-ring text-[13px] font-semibold text-secondary font-space-grotesk mb-5">
+                            For departments
+                        </div>
+                        <h2 className="font-space-grotesk font-bold text-[30px] mb-4 text-foreground">
+                            Every department sees its own queue, nothing
+                            else.
+                        </h2>
+                        <p className="text-[15px] leading-[1.65] text-muted-foreground mb-5">
+                            A six-level role hierarchy — from field worker to
+                            department head — scopes every queue to that
+                            department or unassigned. Sorted by urgency and
+                            community signal, not submission order.
+                        </p>
+                        <Link
+                            href="/auth?mode=login"
+                            className={`font-space-grotesk font-semibold text-sm text-foreground border-b-[1.5px] border-foreground ${FOCUS_RING}`}
+                        >
+                            See the staff dashboard →
+                        </Link>
+                    </div>
+                    <div className="border border-border bg-card">
+                        <div className="px-5 py-3.5 border-b border-border flex justify-between items-center">
+                            <span className="font-space-grotesk font-semibold text-[13px] text-foreground">
+                                Public Works — queue
+                            </span>
+                            <span className="text-[11px] text-caption-foreground">
+                                unassigned + mine only
+                            </span>
+                        </div>
+                        <div className="flex flex-col">
+                            <div className="flex items-center justify-between px-5 py-3.5 border-b border-[#F0EFF6]">
+                                <span className="text-[13px] text-foreground">
+                                    Downed power line, Elm &amp; 4th
+                                </span>
+                                <span className="font-space-grotesk text-[10px] font-bold px-2 py-1 bg-accent text-white">
+                                    HIGH
+                                </span>
+                            </div>
+                            <div className="flex items-center justify-between px-5 py-3.5 border-b border-[#F0EFF6]">
+                                <span className="text-[13px] text-foreground">
+                                    Streetlight out, Park Row
+                                </span>
+                                <span className="font-space-grotesk text-[10px] font-bold px-2 py-1 border border-ring text-secondary">
+                                    MEDIUM
+                                </span>
+                            </div>
+                            <div className="flex items-center justify-between px-5 py-3.5">
+                                <span className="text-[13px] text-foreground">
+                                    Cracked sidewalk slab
+                                </span>
+                                <span className="font-space-grotesk text-[10px] font-bold px-2 py-1 border border-border text-caption-foreground">
+                                    LOW
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* CTA */}
+            <section className="max-w-[1220px] mx-auto px-6 md:px-12 py-20 text-center border-t border-border">
+                <h2 className="font-space-grotesk font-bold text-[28px] md:text-[34px] mb-4 text-foreground">
+                    Every report gets read the same second it&apos;s filed.
+                </h2>
+                <p className="text-base text-muted-foreground max-w-[460px] mx-auto mb-8">
+                    File a report or sign in to track the ones you&apos;ve
+                    already sent.
+                </p>
+                <div className="flex gap-4 justify-center flex-wrap">
+                    <Link
+                        href="/citizen/report"
+                        className={`font-space-grotesk font-semibold text-base px-8 py-4 bg-accent text-white hover:brightness-90 transition-[filter] ${FOCUS_RING}`}
+                    >
+                        Report an issue
+                    </Link>
+                    <Link
+                        href="/auth?mode=login"
+                        className={`font-space-grotesk font-semibold text-base px-8 py-4 border-[1.5px] border-foreground text-foreground hover:bg-foreground hover:text-white transition-colors ${FOCUS_RING}`}
+                    >
+                        Sign in
+                    </Link>
+                </div>
+            </section>
+
+            <footer className="border-t border-border px-6 md:px-12 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+                <span className="font-space-grotesk font-bold text-[15px] text-foreground">
+                    BEACON
+                </span>
+                <span className="text-[13px] text-caption-foreground">
+                    Civic issue triage, built for departments that can&apos;t
+                    read every ticket by hand.
+                </span>
             </footer>
         </div>
-    );
+    )
 }
