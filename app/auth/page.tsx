@@ -300,7 +300,7 @@ function UnifiedAuthPageInner() {
                     <SelectTrigger>
                       <SelectValue placeholder="Choose your role" />
                     </SelectTrigger>
-                    <SelectContent className="relative z-10 bg-white">
+                    <SelectContent className="relative z-10">
                       <SelectItem value="citizen">
                         <div className="flex items-center space-x-2">
                           <MapPin className="w-4 h-4 text-blue-600" />
@@ -359,7 +359,7 @@ function UnifiedAuthPageInner() {
                     <SelectTrigger>
                       <SelectValue placeholder="Choose your department" />
                     </SelectTrigger>
-                    <SelectContent className="relative z-10 bg-white">
+                    <SelectContent className="relative z-10">
                       {departments.map((dept) => (
                         <SelectItem key={dept.id} value={dept.id}>
                           <div className="flex items-center space-x-2">
